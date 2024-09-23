@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import Home from './pages/home.page'
 import { GlobalStyles } from './styles/globalStyle'
-import { theme } from './theme/Theme'
+import { theme } from './theme/theme'
 
 
 function App() {
