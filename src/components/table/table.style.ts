@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { spaces } from './table.variables';
 
 
-export const TableContainer = styled.div`
+export const ListContainer = styled.div`
   width: 100%;
   padding: ${spaces.sm};
 `;

@@ -1,10 +1,8 @@
-import { CirclePlus, ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
+import { ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { Space } from '../../styles/globalStyle';
 import { theme } from '../../theme/theme';
 
 import {
-    CreateButton,
     PaginationButton,
     PaginationContainer,
     PaginationInfo,
@@ -16,9 +14,8 @@ import {
     STh,
     SThead,
     STr,
-    TableContainer,
     TableContent,
-    TableSearchContainer,
+    TableSearchContainer
 } from './table.style';
 
 
@@ -32,9 +29,14 @@ export interface IColumns {
     dataRender?: (data: any) => React.ReactNode
 }
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 8;
 
-const TableSearchInput = ({ placeholder, onChange }: { placeholder: string; onChange: (value: string) => void }) => {
+
+
+interface ITableSearchInput extends React.InputHTMLAttributes<HTMLInputElement> {
+    placeholder: string;
+}
+export const TableSearchInput = ({ placeholder, ...props }: ITableSearchInput) => {
     const ref = useRef<HTMLInputElement>(null);
 
     return (
@@ -45,10 +47,12 @@ const TableSearchInput = ({ placeholder, onChange }: { placeholder: string; onCh
                 }}
                 color='grey'
             />
-            <SearchInput ref={ref} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+            <SearchInput ref={ref} placeholder={placeholder} {...props} />
         </TableSearchContainer>
     );
 }
+
+
 
 
 export const TButtonAction = ({ children, type }: {
@@ -92,16 +96,7 @@ export const Table = ({ dataSource = [], columns }: {
     );
 
     return (
-        <TableContainer>
-            <Space justifyContent="space-between" alignItems="center" margin={'16px 0px'}>
-                <TableSearchInput placeholder="Pesquisar..." onChange={setSearch} />
-                <CreateButton>
-                    <Space>
-                        <CirclePlus />
-                        <span>Criar</span>
-                    </Space>
-                </CreateButton>
-            </Space>
+        <>
             <TableContent>
 
                 <STable>
@@ -158,7 +153,7 @@ export const Table = ({ dataSource = [], columns }: {
                     Próxima
                 </PaginationButton>
             </PaginationContainer>
-        </TableContainer>
+        </>
     );
 }
 

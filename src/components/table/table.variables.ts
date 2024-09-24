@@ -1,17 +1,17 @@
 export const spaces = {
 
-    borderRadius: "8px",
+    borderRadius: ".5rem",
 
     // espaçamento interno
-    md: "16px",
-    sm: "8px",
-    lg: "32px",
+    sm: ".5rem",
+    md: "1rem",
+    lg: "2rem",
 
     // tamanho externo de container
     container: {
-        sm: "37.5em",
-        md: "48em",
-        lg: "64em",
+        sm: "37.5rem",
+        md: "48rem",
+        lg: "64rem",
     },
 
     //estilos
