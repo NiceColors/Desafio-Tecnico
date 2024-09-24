@@ -1,4 +1,4 @@
-import { Container, Content } from "../styles/globalStyle";
+import { Container, Content } from "../../styles/globalStyle";
 
 const Home = () => {
     return (
