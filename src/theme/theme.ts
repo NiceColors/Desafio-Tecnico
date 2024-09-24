@@ -1,7 +1,6 @@
-import { DefaultTheme } from 'styled-components'
 import { colors } from './colors'
 
-export const theme: DefaultTheme = {
+export const theme = {
     colors: {
         primary: colors.blueDark,
         backgroundLight: colors.greyLighter,
@@ -28,6 +27,7 @@ export const theme: DefaultTheme = {
     },
     margins: {
         pageTop: '30px',
+        features: '20px',
     },
     fontWeights: {
         normal: 400,

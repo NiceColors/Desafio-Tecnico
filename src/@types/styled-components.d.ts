@@ -1,7 +1,7 @@
 
 
 import type { CSSProp } from "styled-components";
-import { theme } from "./theme";
+import { theme } from "../theme/theme";
 
 type ThemeType = typeof theme;
 
