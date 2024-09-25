@@ -2,6 +2,7 @@ import { ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { theme } from '../../theme/theme';
 
+import { LoadingSpinner } from '../loading.component';
 import {
     PaginationButton,
     PaginationContainer,
@@ -79,23 +80,15 @@ export const TButtonAction = ({ children, type }: {
 interface ITable<T extends Record<string, any>> {
     dataSource: T[],
     columns: IColumns[],
+    loading?: boolean
 }
 
-export const Table = <T extends Record<string, any>>({ dataSource, columns }: ITable<T>) => {
+export const Table = <T extends Record<string, any>>({ dataSource, columns, loading }: ITable<T>) => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [search, setSearch] = useState("");
+    const totalPages = Math.ceil(dataSource.length / ITEMS_PER_PAGE);
 
-    
-
-
-    const filteredData = dataSource.filter((data) => data && Object.values(data).some((value: any) =>
-        value.toString().toLowerCase().includes(search.toLowerCase())
-    ));
-
-    const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-
-    const paginatedData = filteredData.slice(
+    const paginatedData = dataSource.slice(
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
@@ -112,7 +105,7 @@ export const Table = <T extends Record<string, any>>({ dataSource, columns }: IT
                     </SThead>
                     <STBody>
 
-                        {paginatedData.length === 0 && (
+                        {loading && (
                             <STr
                                 style={{
                                     backgroundColor: 'white',
@@ -120,11 +113,14 @@ export const Table = <T extends Record<string, any>>({ dataSource, columns }: IT
                                     height: '300px',
                                 }}
                             >
-                                <STd align="center" colSpan={columns.length}>Nenhum resultado encontrado</STd>
+                                <STd align="center" colSpan={columns.length}>
+                                    <LoadingSpinner />
+
+                                </STd>
                             </STr>
                         )}
 
-                        {paginatedData.map((data, index) => (
+                        {!loading && paginatedData.map((data, index) => (
                             <STr key={index}>
                                 {columns.map((column, index) => (
                                     <>
@@ -137,6 +133,20 @@ export const Table = <T extends Record<string, any>>({ dataSource, columns }: IT
                                 ))}
                             </STr>
                         ))}
+
+                        {!loading && paginatedData.length === 0 && (
+                            <STr
+                                style={{
+                                    backgroundColor: 'white',
+                                    border: 'none',
+                                    height: '300px',
+                                }}
+                            >
+                                <STd align="center" colSpan={columns.length}>Nenhum resultado encontrado</STd>
+                            </STr>
+                        )}
+
+
                     </STBody>
                 </STable>
             </TableContent>

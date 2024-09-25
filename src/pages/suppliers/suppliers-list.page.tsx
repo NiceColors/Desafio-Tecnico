@@ -1,12 +1,12 @@
+import axios from "axios";
 import { CirclePlus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import SupplierForm from "../../components/form/supplier-form.component";
 import Modal from "../../components/modal/modal.component";
 import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/table/table.component";
 import { CreateButton, ListContainer } from "../../components/table/table.style";
 import { Content, Space } from "../../styles/globalStyle";
-
-
 
 interface ISupplierContact {
     id: number;
@@ -28,10 +28,12 @@ interface ISupplier {
     description: string;
     contato: ISupplierContact[];
     address: ISupplierAddress;
-
 }
 
+const DELAY = 300;
+
 export const SuppliersListPage = () => {
+
 
     const columns: IColumns[] = [
         {
@@ -71,7 +73,6 @@ export const SuppliersListPage = () => {
             align: 'center',
             dataRender: ({ address }: ISupplier) => <span>{address.city}</span>
         },
-
         {
             title: 'Logradouro',
             dataIndex: 'logradouro',
@@ -86,8 +87,6 @@ export const SuppliersListPage = () => {
             align: 'center',
             dataRender: ({ address }: ISupplier) => <span>{address.number}</span>
         },
-
-
         {
             title: 'Ações',
             dataIndex: 'actions',
@@ -101,33 +100,65 @@ export const SuppliersListPage = () => {
                 </Space>
             ),
         },
-    ]
+    ];
+
+
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [providers, setProviders] = useState<ISupplier[]>([]);
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+    const [loading, setLoading] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
-    const [providers, setProviders] = useState<ISupplier[]>([])
+    const getProviders = useCallback(async (search: string) => {
+        try {
+            setLoading(true);
+            const { data: res } = await axios.get(`http://localhost:3000/suppliers`, {
+                params: {
+                    ...search && { name_like: search }
+                }
+            });
+            setProviders(res);
+        } catch (error) {
+            toast.error('Erro ao carregar fornecedores!');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
-    const getProviders = async () => {
-        const response = await fetch('http://localhost:3000/suppliers')
-        const data = await response.json()
-        setProviders(data)
-    }
 
     useEffect(() => {
-        getProviders()
-    }, [])
+        const timerId = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, DELAY);
 
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [searchTerm]);
+
+    useEffect(() => {
+        if (!loading) getProviders(debouncedSearchTerm);
+    }, [debouncedSearchTerm]);
+
+    const handleSearch = (value: string) => {
+        setSearchTerm(value);
+    };
 
     return (
         <Content>
-
             <ListContainer>
                 <Space justifyContent="space-between" alignItems="center" margin={'16px 0px'}>
-                    <TableSearchInput placeholder="Pesquisar..." />
-
+                    <TableSearchInput
+                        placeholder="Pesquisar..."
+                        onChange={(e) => handleSearch(e.target.value)}
+                        value={searchTerm}
+                    />
                     <CreateButton
                         type="button"
                         onClick={openModal}
@@ -137,15 +168,13 @@ export const SuppliersListPage = () => {
                             <span>Criar</span>
                         </Space>
                     </CreateButton>
-
                 </Space>
                 <Table
-                    dataSource={providers}
+                    dataSource={providers ?? []}
                     columns={columns}
+                    loading={loading}
                 />
-
             </ListContainer>
-
             <Modal
                 isOpen={isModalOpen}
                 onClose={closeModal}
@@ -157,4 +186,3 @@ export const SuppliersListPage = () => {
         </Content>
     );
 }
-
