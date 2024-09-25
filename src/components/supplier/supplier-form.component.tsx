@@ -106,7 +106,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
           </SectionTitle>
         </SectionTitleContainer>
 
-        <FormGroup columns={2}>
+        <FormGroup $columns={2}>
           <FormItem>
             <Label htmlFor="name">
               Nome <Required />
@@ -136,7 +136,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
 
           {fields.map((field, index) => (
             <ContactItem key={field.id}>
-              <FormGroup columns={2}>
+              <FormGroup $columns={2}>
                 <FormItem>
                   <Label htmlFor={`contacts.${index}.name`}>Nome<Required /></Label>
                   <Input id={`contacts.${index}.name`} {...register(`contacts.${index}.name`)} />
@@ -194,7 +194,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
           </SectionTitle>
         </SectionTitleContainer>
 
-        <FormGroup columns={3}>
+        <FormGroup $columns={3}>
           <FormItem>
             <Label htmlFor="address.cep">CEP <Required /></Label>
             <Controller
@@ -244,7 +244,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
             {errors.address?.reference && <ErrorMessage>{errors.address.reference.message}</ErrorMessage>}
           </FormItem>
 
-          <FormItem width="100px">
+          <FormItem $width="100px">
             <Label htmlFor="address.number">Número <Required /></Label>
             <Input
               id="address.number"

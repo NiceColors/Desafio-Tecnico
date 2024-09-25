@@ -9,11 +9,11 @@ const TooltipContainer = styled.div`
 
 type TTooltipType = 'info' | 'warning' | 'danger';
 
-const TooltipText = styled.div<{ visible: boolean, type: TTooltipType }>`
-  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+const TooltipText = styled.div<{ $visible: 'visible' | 'hidden', $type: TTooltipType }>`
+  visibility: ${({ $visible }) => $visible};
   font-size: small;
-  background-color: ${({ type, theme }) => {
-        switch (type) {
+  background-color: ${({ $type, theme }) => {
+        switch ($type) {
             case 'info':
                 return theme.colors.blueMedium;
             case 'warning':
@@ -34,7 +34,7 @@ const TooltipText = styled.div<{ visible: boolean, type: TTooltipType }>`
   transform: translateX(-50%);
   white-space: nowrap;
 
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
   transition: opacity 0.5s ease;
   z-index: 9999;
   &::after {
@@ -45,8 +45,8 @@ const TooltipText = styled.div<{ visible: boolean, type: TTooltipType }>`
         border-width: 3px;
         border-radius:  0 0 2px 2px;  
         border-style: solid;
-        border-color: ${({ type, theme }) => {
-        switch (type) {
+        border-color: ${({ $type, theme }) => {
+        switch ($type) {
             case 'info':
                 return theme.colors.blueMedium;
             case 'warning':
@@ -70,10 +70,10 @@ interface TooltipProps {
 
 const Tooltip: React.FC<TooltipProps> = ({ text, type = 'info', children }) => {
 
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState<'visible' | 'hidden'>('hidden');
 
-    const showTooltip = () => setVisible(true);
-    const hideTooltip = () => setVisible(false);
+    const showTooltip = () => setVisible('visible');
+    const hideTooltip = () => setVisible('hidden');
 
     return (
         <TooltipContainer
@@ -81,7 +81,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text, type = 'info', children }) => {
             onMouseLeave={hideTooltip}
         >
             {children}
-            <TooltipText type={type} visible={visible}>{text}</TooltipText>
+            <TooltipText $type={type} $visible={visible}>{text}</TooltipText>
         </TooltipContainer>
     );
 };

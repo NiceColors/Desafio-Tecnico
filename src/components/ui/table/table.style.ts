@@ -3,8 +3,6 @@ import { device } from '../../../styles/breakpoints';
 import { Space } from '../../../styles/globalStyle';
 import { spaces } from './table.variables';
 
-
-
 export const TableContent = styled.div`
   overflow-x: auto;
   border-radius: ${spaces.sm};
@@ -48,12 +46,12 @@ export const STh = styled.th`
   white-space: nowrap;
 `;
 
-export const STd = styled.td<{ align?: 'center' | 'left' | 'right'; width?: string | number }>`
+export const STd = styled.td<{ $align?: 'center' | 'left' | 'right'; $width?: string | number }>`
   padding: ${spaces.md} ${spaces.md};
   border: 1px solid ${({ theme }) => theme.colors.backgroundLight};
   color: ${({ theme }) => theme.colors.textLight};
-  text-align: ${({ align = 'center' }) => align};
-  width: ${({ width = 'auto' }) => (typeof width === 'number' ? `${width}px` : width)};
+  text-align: ${({ $align = 'center' }) => $align};
+  width: ${({ $width = 'auto' }) => (typeof $width === 'number' ? `${$width}px` : $width)};
 
   @media (max-width: ${spaces.container.md}) {
     white-space: nowrap;
@@ -67,6 +65,7 @@ export const STd = styled.td<{ align?: 'center' | 'left' | 'right'; width?: stri
 export const STr = styled.tr`
   background: ${({ theme }) => theme.colors.white};
   transition: background 0.2s ease-in-out;
+  min-height: 300px;
   &:hover {
     background-color: ${({ theme }) => theme.colors.greyLight};
   }
@@ -154,6 +153,9 @@ export const PaginationInfo = styled.span`
 
 export const TableListActionsSpace = styled(Space)`
 
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
   @media ${device.sm} {
     flex-wrap: wrap;
     flex-direction: column-reverse;
@@ -168,3 +170,9 @@ export const TableListActionsSpace = styled(Space)`
   }
 
 `
+
+export const TableNoContentContainer = styled(STr)`
+  background-color: ${({ theme }) => theme.colors.backgroundLight};
+  height: 300px;
+
+`;

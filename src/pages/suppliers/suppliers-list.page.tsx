@@ -4,13 +4,14 @@ import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 import styled from "styled-components";
 import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
+import { ITableColumns } from "../../@types/table";
 import { SupplierContacts } from "../../components/supplier/supplier-contacts.component";
 import SupplierForm from "../../components/supplier/supplier-form.component";
 import SupplierView from "../../components/supplier/supplier-view.component";
 import { ListContainer, ListHeader, ListHeaderDescription, ListHeaderTitle } from "../../components/ui/list/list.style";
 import Tooltip from "../../components/ui/loading/tooltip.component";
 import Modal from "../../components/ui/modal/modal.component";
-import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/ui/table/table.component";
+import { Table, TableSearchInput, TButtonAction } from "../../components/ui/table/table.component";
 import { TableListActionsSpace } from "../../components/ui/table/table.style";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useFetch } from "../../hooks/useFetch";
@@ -132,7 +133,7 @@ const SuppliersListPage: React.FC = () => {
         setSelectedSupplier(null);
     };
 
-    const columns: IColumns[] = [
+    const columns: ITableColumns[] = [
         { title: 'Nome', dataIndex: 'name', key: 'name' },
         { title: 'Descrição', dataIndex: 'description', key: 'description' },
         {
@@ -150,6 +151,7 @@ const SuppliersListPage: React.FC = () => {
         { title: 'Estado', dataIndex: 'estado', key: 'estado', align: 'center', dataRender: renderAddressField('state') },
         { title: 'Cidade', dataIndex: 'cidade', key: 'cidade', align: 'center', dataRender: renderAddressField('city') },
         { title: 'Logradouro', dataIndex: 'logradouro', key: 'logradouro', align: 'center', dataRender: renderAddressField('street') },
+        { title: 'Referência', dataIndex: 'referencia', key: 'referencia', align: 'center', dataRender: renderAddressField('reference') },
         { title: 'Número', dataIndex: 'number', key: 'number', align: 'center', dataRender: renderAddressField('number') },
         {
             title: 'Ações',
@@ -194,7 +196,7 @@ const SuppliersListPage: React.FC = () => {
                     </ListHeaderDescription>
                 </ListHeader>
 
-                <TableListActionsSpace justifyContent="space-between" alignItems="center" margin="16px 0">
+                <TableListActionsSpace>
                     <TableSearchInput
                         placeholder="Pesquisar nome..."
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -237,7 +239,7 @@ const SuppliersListPage: React.FC = () => {
                     <DeleteContainer>
                         <h1><strong>Deletar Fornecedor</strong></h1>
                         <p>Você tem certeza que deseja deletar o fornecedor <strong>{selectedSupplierData?.name}</strong>?</p>
-                        <Space justifyContent="space-between">
+                        <Space $justifyContent="space-between">
                             <Button type="button" onClick={handleModalClose}>Cancelar</Button>
                             <Button type="button" onClick={() => {
                                 deleteSupplierById(selectedSupplierData?.id!);

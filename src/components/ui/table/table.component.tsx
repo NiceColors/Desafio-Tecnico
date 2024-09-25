@@ -2,9 +2,11 @@ import { ChevronLeft, ChevronRight, ScanEye, Search, Trash2, UserRoundPen } from
 import { HTMLProps, ReactNode, useEffect, useRef, useState } from 'react';
 import { theme } from '../../../theme/theme';
 
+import { ITableColumns, ITableSearchInput } from '../../../@types/table';
 import { Space } from '../../../styles/globalStyle';
 import { LoadingSpinner } from '../loading/loading.component';
 import { PageNumberButton, PageNumbersContainer, PaginationButton } from './pagination.styles';
+
 import {
     PaginationContainer,
     SearchInput,
@@ -16,25 +18,11 @@ import {
     SThead,
     STr,
     TableContent,
+    TableNoContentContainer,
     TableSearchContainer
 } from './table.style';
 
 const ITEMS_PER_PAGE = 8;
-
-export interface IColumns {
-    title: string,
-    dataIndex: string,
-    key: string,
-    align?: 'center' | 'left' | 'right',
-    width?: string,
-    exampandable?: boolean,
-    dataRender?: (data: any) => React.ReactNode
-}
-
-interface ITableSearchInput extends React.InputHTMLAttributes<HTMLInputElement> {
-    placeholder: string;
-}
-
 
 export const TableSearchInput: React.FC<ITableSearchInput> = ({ placeholder, ...props }) => {
     const ref = useRef<HTMLInputElement>(null);
@@ -77,9 +65,8 @@ export const TButtonAction: React.FC<IButtonAction> = ({ children, type, ...prop
 
 interface ITable<T extends Record<string, any>> {
     dataSource: T[],
-    columns: IColumns[],
+    columns: ITableColumns[],
     loading?: boolean
-    // expandedRowRender?: (data: T) => ReactNode
 }
 
 
@@ -87,7 +74,6 @@ export const Table = <T extends Record<string, any>>({
     dataSource,
     columns,
     loading,
-    // expandedRowRender
 }: ITable<T>) => {
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -115,7 +101,7 @@ export const Table = <T extends Record<string, any>>({
             pageNumbers.push(
                 <PageNumberButton
                     key={i}
-                    active={i === currentPage}
+                    $active={i === currentPage}
                     onClick={() => handlePageChange(i)}
                 >
                     {i}
@@ -130,64 +116,41 @@ export const Table = <T extends Record<string, any>>({
             <TableContent>
                 <STable>
                     <SThead>
-                        {columns.map((column, index) => (
-                            <STh key={index}>{column.title}</STh>
-                        ))}
+                        <tr>
+                            {columns.map((column, index) => (
+                                <STh key={index}>{column.title}</STh>
+                            ))}
+                        </tr>
                     </SThead>
                     <STBody>
                         {loading && (
-                            <STr
-                                style={{
-                                    backgroundColor: 'white',
-                                    border: 'none',
-                                    height: '300px',
-                                }}
-                            >
-                                <STd align="center" colSpan={columns.length}>
+                            <TableNoContentContainer>
+                                <STd $align="center" colSpan={columns.length}>
                                     <LoadingSpinner />
                                 </STd>
-                            </STr>
+                            </TableNoContentContainer>
                         )}
 
-                        {!loading && paginatedData.map((data, index) => (
-                            <>
-                                <STr key={index}>
-                                    {columns.map((column, columnIndex) => (
-                                        <STd
-                                            key={columnIndex}
-                                            align={column.align}
-                                            width={column.width}
-                                        >
-                                            {column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}
-                                        </STd>
-                                    ))}
-                                </STr>
-
-
-
-                                {/* 
-                                {expandedRowRender && (
-                                    <STr>
-                                        <STd colSpan={columns.length}>
-                                            {expandedRowRender(data)}
-                                        </STd>
-                                    </STr>
-                                )} */}
-                            </>
+                        {!loading && paginatedData.map((data) => (
+                            <STr key={data.id}>
+                                {columns.map((column, columnIndex) => (
+                                    <STd
+                                        key={columnIndex}
+                                        $align={column.align}
+                                        $width={column.width}
+                                    >
+                                        {column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}
+                                    </STd>
+                                ))}
+                            </STr>
                         ))}
 
                         {!loading && paginatedData.length === 0 && (
-                            <STr
-                                style={{
-                                    backgroundColor: 'white',
-                                    border: 'none',
-                                    height: '300px',
-                                }}
-                            >
-                                <STd align="center" colSpan={columns.length}>
+                            <TableNoContentContainer>
+                                <STd $align="center" colSpan={columns.length}>
                                     Nenhum resultado encontrado
                                 </STd>
-                            </STr>
+                            </TableNoContentContainer>
                         )}
                     </STBody>
                 </STable>

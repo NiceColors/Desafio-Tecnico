@@ -45,16 +45,16 @@ export const ErrorMessage = styled.span`
 `;
 
 export const FormGroup = styled.div<{
-  columns?: number;
-  gap?: number;
+  $columns?: number;
+  $gap?: number;
 }>`
     display: grid;
-    grid-template-columns: repeat(${({ columns }) => columns ?? 1}, 1fr);
-    gap: ${({ gap }) => gap ?? 20}px;
+    grid-template-columns: repeat(${({ $columns }) => $columns ?? 1}, 1fr);
+    gap: ${({ $gap }) => $gap ?? 20}px;
     margin-bottom: 1.5rem;
 
     @media (${device.md}) {
-        grid-template-columns: repeat(${({ columns }) => columns ? columns - 1 : 1}, 1fr);
+        grid-template-columns: repeat(${({ $columns }) => $columns ? $columns - 1 : 1}, 1fr);
     }
 
     @media (${device.sm}) {
@@ -70,9 +70,9 @@ export const FormGroup = styled.div<{
 
  `
 
-export const FormItem = styled.div<{ width?: string }>`
+export const FormItem = styled.div<{ $width?: string }>`
   > input {
-    width: ${({ width }) => width ?? '100%'};
+    width: ${({ $width }) => $width ?? '100%'};
   }
 `;
 

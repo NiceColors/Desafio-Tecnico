@@ -143,17 +143,17 @@ export const Button = styled.button`
 `;
 
 export const Space = styled.div<{
-  justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-  alignItems?: 'center' | 'flex-start' | 'flex-end' | 'baseline' | 'stretch';
-  margin?: string | number;
-  wrap?: boolean;
+  $justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  $alignItems?: 'center' | 'flex-start' | 'flex-end' | 'baseline' | 'stretch';
+  $margin?: string | number;
+  $wrap?: boolean;
 }>`
   display: flex;
-  justify-content: ${({ justifyContent = 'center' }) => justifyContent};
-  align-items: ${({ alignItems = 'center' }) => alignItems};
+  justify-content: ${({ $justifyContent = 'center' }) => $justifyContent};
+  align-items: ${({ $alignItems = 'center' }) => $alignItems};
   gap: 5px;
-  margin: ${({ margin }) => margin};
-  flex-wrap:  ${({ wrap }) => wrap ? 'wrap' : 'nowrap'};
+  margin: ${({ $margin }) => $margin};
+  flex-wrap:  ${({ $wrap }) => $wrap ? 'wrap' : 'nowrap'};
 `;
 
 

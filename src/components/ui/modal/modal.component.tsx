@@ -56,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <ModalOverlay>
-      <ModalContainer width={width} ref={modalRef} role="dialog" aria-modal="true">
+      <ModalContainer $width={width} ref={modalRef} role="dialog" aria-modal="true">
         {hasCloseBtn && (
           <CloseModalButton onClick={onClose} aria-label="Fechar modal">
             <X />

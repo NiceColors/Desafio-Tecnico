@@ -17,11 +17,11 @@ export const ModalOverlay = styled.div`
 
 `;
 
-export const ModalContainer = styled.div<{ width?: string }>`
+export const ModalContainer = styled.div<{ $width?: string }>`
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: ${({ width }) => width ?? '95%'};
+  width: ${({ $width }) => $width ?? '95%'};
   max-width: calc(100% - 40px);
   max-height: 80%;
   overflow-y: auto;
