@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { spaces } from './table.variables';
+import { device } from '../../styles/breakpoints';
+import { Space } from '../../styles/globalStyle';
 
 
 export const ListContainer = styled.div`
@@ -96,9 +98,10 @@ export const TableSearchContainer = styled.div`
     border: 1px solid ${({ theme }) => theme.colors.blueMedium};
   }
 
-  @media (max-width: ${spaces.container.md}) {
+  @media ${device.md} {
     max-width: 100%;
   }
+
 
 
 
@@ -146,3 +149,16 @@ export const PaginationInfo = styled.span`
   color: ${({ theme }) => theme.colors.textLight};
   font-size: 14px;
 `;
+
+
+export const TableListActionsSpace = styled(Space)`
+
+  @media ${device.sm} {
+    flex-wrap: wrap;
+
+    button{
+      width: 100%;
+    }
+  }
+
+`

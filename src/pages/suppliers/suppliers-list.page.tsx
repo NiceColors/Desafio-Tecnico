@@ -7,10 +7,11 @@ import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
 import SupplierForm from "../../components/form/supplier-form.component";
 import Modal from "../../components/modal/modal.component";
 import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/table/table.component";
-import { ListContainer } from "../../components/table/table.style";
+import { ListContainer, TableListActionsSpace } from "../../components/table/table.style";
 import Tooltip from "../../components/tooltip.component";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useFetch } from "../../hooks/useFetch";
+import { device } from "../../styles/breakpoints";
 import { Button, Content, Space } from "../../styles/globalStyle";
 import { theme } from "../../theme/theme";
 
@@ -23,10 +24,13 @@ const DeleteSupplierContainer = styled.div`
     max-width: 350px;
     margin: 0 auto;
     
-    h1 strong {
+    h1, h1 strong {
         font-size: 2rem;
         color: ${theme.colors.redDark};
-        
+        text-align: center;
+        @media ${device.sm}{
+            font-size: 1.5rem;
+        }
     }
     
     p {
@@ -34,6 +38,10 @@ const DeleteSupplierContainer = styled.div`
         text-align: center;
         color: ${theme.colors.textLight};
         margin-bottom: 18px;
+
+        @media ${device.sm}{
+            font-size: 0.875rem;
+        }
     }
 
     ${Space} {
@@ -132,19 +140,17 @@ const SuppliersListPage: React.FC = () => {
     return (
         <Content>
             <ListContainer>
-                <Space justifyContent="space-between" alignItems="center" margin="16px 0">
+                <TableListActionsSpace justifyContent="space-between" alignItems="center" margin="16px 0">
                     <TableSearchInput
                         placeholder="Pesquisar..."
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />
                     <Button type="button" onClick={() => setIsModalOpen(true)}>
-                        <Space>
-                            <CirclePlus size={18} />
-                            <span>Criar Fornecedor</span>
-                        </Space>
+                        <CirclePlus size={18} />
+                        <span>Criar</span>
                     </Button>
-                </Space>
+                </TableListActionsSpace>
                 <Table dataSource={providers} columns={columns} loading={loading} />
             </ListContainer>
             <Modal
@@ -152,6 +158,7 @@ const SuppliersListPage: React.FC = () => {
                 onClose={() => setIsModalOpen(false)}
                 hasCloseBtn={true}
                 closeOnOutsideClick={true}
+                width="1200px"
             >
                 <SupplierForm refetchData={refetch} />
             </Modal>
@@ -161,7 +168,7 @@ const SuppliersListPage: React.FC = () => {
                 onClose={() => setIsDeleteModalOpen(false)}
                 hasCloseBtn={true}
                 closeOnOutsideClick={true}
-
+                width="380px"
             >
                 <DeleteSupplierContainer>
                     <h1><strong>Deletar Fornecedor</strong></h1>

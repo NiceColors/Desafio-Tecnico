@@ -172,10 +172,12 @@ const SupplierForm: React.FC<{ refetchData: () => void }> = ({ refetchData }) =>
 
         </FormSection>
 
-        <AddContactButton type="button" onClick={() => append({ name: '', phoneNumber: '' })}>
-          <Plus size={20} />
-          Adicionar Contato
-        </AddContactButton>
+        <FormSection>
+          <AddContactButton type="button" onClick={() => append({ name: '', phoneNumber: '' })}>
+            <Plus size={20} />
+            Adicionar Contato
+          </AddContactButton>
+        </FormSection>
 
 
         <FormSection>

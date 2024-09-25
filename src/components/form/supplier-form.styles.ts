@@ -128,6 +128,7 @@ export const ActionContainer = styled.div`
 `
 
 export const AddContactButton = styled.button`
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -135,7 +136,6 @@ export const AddContactButton = styled.button`
     color:  ${({ theme }) => theme.colors.primary};
     border: 2px dashed ${({ theme }) => theme.colors.greyLight};
     padding: .75rem 1rem;
-    width: auto;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
@@ -161,6 +161,7 @@ export const ContactItem = styled.div`
 `;
 
 export const FormSection = styled.div`
+  width: 100%;
 `
 
 export const Required = styled.span`

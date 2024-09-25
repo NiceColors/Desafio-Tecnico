@@ -109,11 +109,22 @@ export const Button = styled.button`
   color: ${({ theme }) => theme.colors.white};
   font-size: small;
   border-radius: .5rem;
-  padding: .575rem 2rem;
+  padding: .725rem 2rem;
   border: none;
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s ease-in-out;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 5px;
+  word-break: keep-all;
+
+  * {
+    word-break: keep-all;
+  }
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blueDark};
@@ -126,12 +137,6 @@ export const Button = styled.button`
     background-color: ${({ theme }) => theme.colors.greyLight};
     cursor: not-allowed;
   }
-
-  @media (${device.sm}) {
-    padding:  0.5rem 1rem;
-    font-size:  small;
-  }
-
 
 
 
@@ -157,6 +162,14 @@ export const Container = styled.div<ContainerProps>`
   padding: 0 ${({ theme }) => theme.paddings.container};
   padding-bottom: 50px;
   background-color: ${({ backgroundColor, theme }) => backgroundColor ?? theme.colors.backgroundDark};
+
+  @media ${device.md} {
+    padding: 0 .5rem;
+  }
+
+
+
+
 `
 
 
