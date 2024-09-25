@@ -181,6 +181,7 @@ const SuppliersListPage: React.FC = () => {
         delete: "380px",
     }
 
+
     return (
         <Content>
             <ListContainer>
@@ -229,7 +230,7 @@ const SuppliersListPage: React.FC = () => {
             >
                 {modalState.type === 'contacts' && <SupplierContacts data={selectedSupplierData} />}
                 {modalState.type === 'create' && <SupplierForm refetchData={refetch} />}
-                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplierData?.id!, data: selectedSupplierData! }} />}
+                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplier!, data: selectedSupplierData! }} />}
                 {modalState.type === 'view' && <SupplierView supplier={selectedSupplierData!} />}
 
                 {modalState.type === 'delete' && (

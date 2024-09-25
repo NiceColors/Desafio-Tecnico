@@ -52,11 +52,9 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
   });
 
   useEffect(() => {
-
     if (edit)
       reset(edit.data);
-
-  }, [edit, reset]);
+  }, []);
 
   const onSubmit = async (data: yup.InferType<typeof supplierSchema>) => {
     try {
@@ -65,7 +63,6 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
         await axios.put(`http://localhost:3000/suppliers/${edit.id}`, data);
       else
         await axios.post('http://localhost:3000/suppliers', data);
-
       toast.success(edit ? 'Fornecedor atualizado com sucesso!' : 'Fornecedor criado com sucesso!');
     } catch (error) {
       toast.error(edit ? 'Erro ao atualizar fornecedor!' : 'Erro ao criar fornecedor!');
