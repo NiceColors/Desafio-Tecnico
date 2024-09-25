@@ -42,7 +42,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
   const { register, control, handleSubmit, setValue, formState: { errors }, trigger, reset } = useForm<yup.InferType<typeof supplierSchema>>({
     resolver: yupResolver(supplierSchema),
     defaultValues: {
-      contacts: [{ name: '', phoneNumber: '' }],
+      contacts: [{ name: '', phone: '' }],
     },
   });
 
@@ -148,13 +148,13 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
                 </FormItem>
 
                 <FormItem>
-                  <Label htmlFor={`contacts.${index}.phoneNumber`}>Telefone <Required /></Label>
+                  <Label htmlFor={`contacts.${index}.phone`}>Telefone <Required /></Label>
                   <Controller
-                    name={`contacts.${index}.phoneNumber`}
+                    name={`contacts.${index}.phone`}
                     control={control}
                     render={({ field }) => (
                       <Input
-                        id={`contacts.${index}.phoneNumber`}
+                        id={`contacts.${index}.phone`}
                         {...field}
                         onChange={(e) => {
                           const formatted = e.target.value
@@ -167,7 +167,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
                       />
                     )}
                   />
-                  {errors.contacts?.[index]?.phoneNumber && <ErrorMessage>{errors.contacts[index].phoneNumber.message}</ErrorMessage>}
+                  {errors.contacts?.[index]?.phone && <ErrorMessage>{errors.contacts[index].phone.message}</ErrorMessage>}
                 </FormItem>
               </FormGroup>
               {index > 0 && (
@@ -184,7 +184,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
       </FormSection>
 
       <FormSection>
-        <AddContactButton type="button" onClick={() => append({ name: '', phoneNumber: '' })}>
+        <AddContactButton type="button" onClick={() => append({ name: '', phone: '' })}>
           <Plus size={20} />
           Adicionar Contato
         </AddContactButton>

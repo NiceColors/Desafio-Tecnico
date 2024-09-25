@@ -5,7 +5,7 @@ export const spaces = {
     // espaçamento interno
     sm: ".5rem",
     md: "1rem",
-    lg: "2rem",
+    lg: "1rem",
 
     // tamanho externo de container
     container: {

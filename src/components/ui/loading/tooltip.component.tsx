@@ -17,7 +17,7 @@ const TooltipText = styled.div<{ visible: boolean, type: TTooltipType }>`
             case 'info':
                 return theme.colors.blueMedium;
             case 'warning':
-                return  theme.colors.yellow;
+                return theme.colors.yellow;
             case 'danger':
                 return theme.colors.red;
             default:
@@ -37,6 +37,27 @@ const TooltipText = styled.div<{ visible: boolean, type: TTooltipType }>`
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.5s ease;
   z-index: 9999;
+  &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border-width: 3px;
+        border-radius:  0 0 2px 2px;  
+        border-style: solid;
+        border-color: ${({ type, theme }) => {
+        switch (type) {
+            case 'info':
+                return theme.colors.blueMedium;
+            case 'warning':
+                return theme.colors.yellow;
+            case 'danger':
+                return theme.colors.red;
+            default:
+                return theme.colors.blueMedium;
+        }
+    }} transparent transparent transparent;
+ }
 
 
 `;

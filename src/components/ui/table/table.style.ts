@@ -142,6 +142,10 @@ export const PaginationContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: ${spaces.md};
+
+  @media ${device.sm} {
+    justify-content: center;
+  }
 `;
 
 
@@ -155,10 +159,15 @@ export const TableListActionsSpace = styled(Space)`
 
   @media ${device.sm} {
     flex-wrap: wrap;
+    flex-direction: column-reverse;
 
-    button{
-      width: 100%;
+    align-items: normal;
+
+    ${Space}{
+      justify-content: end;
     }
+  
+
   }
 
 `

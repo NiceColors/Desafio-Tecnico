@@ -36,8 +36,8 @@ export const PageNumberButton = styled.button<{ active: boolean }>`
 
     &:disabled {
         cursor: not-allowed;
-        background-color: #f0f0f0;
-        color: #ccc;
+        background-color:  ${({ theme }) => theme.colors.greyLight};
+        color: ${({ theme }) => theme.colors.textLight};
     }
 `;
 

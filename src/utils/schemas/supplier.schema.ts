@@ -15,7 +15,7 @@ export const supplierSchema = yup.object().shape({
     contacts: yup.array().of(
         yup.object().shape({
             name: yup.string().required('Nome do contato é obrigatório').matches(REGEX_ALPHANUMERIC_FORMAT, 'Nome do contato deve ser alfabético'),
-            phoneNumber: yup.string().required('Número de telefone é obrigatório').matches(REGEX_PHONE_NUMBER_FORMAT, 'Formato inválido. Use o formato (##) #####-####')
+            phone: yup.string().required('Número de telefone é obrigatório').matches(REGEX_PHONE_NUMBER_FORMAT, 'Formato inválido. Use o formato (##) #####-####')
         })
     ).min(1, 'Pelo menos um contato é obrigatório'),
     address: yup.object().shape({

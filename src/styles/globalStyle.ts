@@ -109,7 +109,7 @@ export const Button = styled.button`
   color: ${({ theme }) => theme.colors.white};
   font-size: small;
   border-radius: .5rem;
-  padding: .725rem 2rem;
+  padding: .725rem 1rem;
   border: none;
   cursor: pointer;
   font-weight: 500;

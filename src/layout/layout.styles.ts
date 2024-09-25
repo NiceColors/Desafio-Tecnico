@@ -34,7 +34,7 @@ export const NavbarBrand = styled(Link)`
 
 export const MainContent = styled.main`
   flex: 1;
-  padding: 2rem;
+  padding: 1rem;
 `;
 
 export const FooterContainer = styled.footer`

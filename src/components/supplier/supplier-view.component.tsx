@@ -1,34 +1,8 @@
 import { Building2, MapPin, Phone, User } from 'lucide-react'
+import { ISupplier } from '../../@types/suppliers'
 import { AddressGrid, AddressItem, AddressLabel, AddressValue, Card, CardContent, CardHeader, CardTitle, ContactItem, ContactList, ContactName, ContactPhone, Description, ScrollArea, Section, SectionTitle, Separator } from './supplier-view.styles'
 
-interface Contact {
-    name: string
-    phoneNumber: string
-}
-
-interface Address {
-    cep: string
-    state: string
-    city: string
-    street: string
-    number: string
-    reference?: string
-}
-
-interface Supplier {
-    id: string
-    name: string
-    description: string
-    contacts: Contact[]
-    address: Address
-}
-
-interface SupplierViewProps {
-    supplier: Supplier
-}
-
-
-export default function SupplierView({ supplier }: SupplierViewProps) {
+const SupplierView: React.FC<{ supplier: ISupplier }> = ({ supplier }) => {
     return (
         <ScrollArea>
             <Card>
@@ -56,7 +30,9 @@ export default function SupplierView({ supplier }: SupplierViewProps) {
                                 <ContactItem key={index}>
                                     <Phone size={16} color="#666" />
                                     <ContactName>{contact.name}:</ContactName>
-                                    <ContactPhone>{contact.phoneNumber}</ContactPhone>
+                                    <ContactPhone
+                                        onClick={() => window.open(`https://wa.me/${contact.phone.replace(/\D/g, '')}`, '_blank')}
+                                    >{contact.phone}</ContactPhone>
                                 </ContactItem>
                             ))}
                         </ContactList>
@@ -103,3 +79,5 @@ export default function SupplierView({ supplier }: SupplierViewProps) {
         </ScrollArea>
     )
 }
+
+export default SupplierView

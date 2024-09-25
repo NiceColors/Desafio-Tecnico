@@ -72,6 +72,7 @@ export const ContactName = styled.span`
 
 export const ContactPhone = styled.span`
   color: ${({ theme }) => theme.colors.blueMedium};
+  cursor: pointer;
 `
 
 export const AddressGrid = styled.div`

@@ -15,10 +15,10 @@ export const SupplierContacts: React.FC<SupplierContactsProps> = ({ data }) => {
                 {data?.contacts.map((contact) => (
                     <ContactCard
                         key={contact.id}
-                        onClick={() => window.open(`https://wa.me/${contact.phoneNumber.replace(/\D/g, '')}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/${contact.phone.replace(/\D/g, '')}`, '_blank')}
                     >
                         <ContactName>{contact.name}</ContactName>
-                        <ContactPhone>{contact.phoneNumber}</ContactPhone>
+                        <ContactPhone>{contact.phone}</ContactPhone>
                     </ContactCard>
                 ))}
             </ContactsWrapper>

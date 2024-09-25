@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, FileDown } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import styled from "styled-components";
@@ -15,6 +15,7 @@ import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useFetch } from "../../hooks/useFetch";
 import { Button, Content, Space } from "../../styles/globalStyle";
 import { theme } from "../../theme/theme";
+import { exportToCSV } from "../../utils/functions/exports";
 
 const DeleteContainer = styled.div`
     display: flex;
@@ -79,6 +80,30 @@ const SuppliersListPage: React.FC = () => {
 
     const { data: providers, loading, refetch } = useFetch<ISupplier>('http://localhost:3000/suppliers', debouncedSearchTerm);
 
+
+    const exportSuppliersToCSV = () => {
+        const formattedProviders = providers.map(provider => {
+
+            const contacts = provider.contacts.map(contact => {
+                return `${contact.name}: ${contact.phone}`;
+            }).join(' - ');
+
+            return {
+                Nome: provider.name,
+                Descrição: provider.description,
+                Contatos: contacts,
+                CEP: provider.address.cep,
+                Estado: provider.address.state,
+                Cidade: provider.address.city,
+                Logradouro: provider.address.street,
+                Número: provider.address.number,
+                Referência: provider.address.reference,
+            }
+        });
+
+        exportToCSV('fornecedores', formattedProviders);
+    }
+
     const deleteSupplierById = useCallback(async (id: string) => {
         try {
             await axios.delete(`http://localhost:3000/suppliers/${id}`);
@@ -140,7 +165,7 @@ const SuppliersListPage: React.FC = () => {
     ];
 
 
-    const modalSize= {
+    const modalSize = {
         contacts: "700px",
         create: "1300px",
         edit: "1300px",
@@ -157,10 +182,19 @@ const SuppliersListPage: React.FC = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />
-                    <Button type="button" onClick={() => handleModalOpen('create')}>
-                        <CirclePlus size={18} />
-                        <span>Criar</span>
-                    </Button>
+                    <Space>
+
+                        <Tooltip text="Exportar para CSV">
+                            <Button type="button" onClick={exportSuppliersToCSV}>
+                                <FileDown size={16} />
+                            </Button>
+                        </Tooltip>
+
+                        <Button type="button" onClick={() => handleModalOpen('create')}>
+                            <CirclePlus size={16} />
+                            <span>Criar</span>
+                        </Button>
+                    </Space>
                 </TableListActionsSpace>
                 <Table
                     dataSource={providers}
