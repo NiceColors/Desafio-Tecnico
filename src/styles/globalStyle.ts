@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
+import { device } from './breakpoints';
 
 export const GlobalStyles = createGlobalStyle`
  
@@ -36,6 +37,11 @@ dl,
 dd {
   padding: 0;
   margin: 0;
+}
+
+p{
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 strong {
@@ -96,6 +102,40 @@ interface ContainerProps {
   backgroundColor?: string;
 }
 
+
+
+export const Button = styled.button`
+  background-color: ${({ theme }) => theme.colors.blueMedium};
+  color: ${({ theme }) => theme.colors.white};
+  font-size: small;
+  border-radius: .5rem;
+  padding: .575rem 2rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.blueDark};
+    > {
+      color: ${({ theme }) => theme.colors.greyLighter};
+    }
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => theme.colors.greyLight};
+    cursor: not-allowed;
+  }
+
+  @media (${device.sm}) {
+    padding:  0.5rem 1rem;
+    font-size:  small;
+  }
+
+
+
+
+`;
 
 export const Space = styled.div<{
   justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
