@@ -27,7 +27,7 @@ export const ContactCard = styled.div`
     border-radius: 8px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
     transition: box-shadow 0.2s ease-in-out;
-
+    cursor: pointer;
     &:hover {
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
     }
@@ -40,8 +40,7 @@ export const ContactName = styled.p`
     color: #007bff;
 `;
 
-export const ContactPhone = styled.p`
+export const ContactPhone = styled.a`
     font-size: small;
-    margin: 4px 0 0 0;
-    color: #555;
+    color: ${({ theme }) => theme.colors.grey};
 `;
