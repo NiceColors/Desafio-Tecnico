@@ -8,7 +8,6 @@ import {
 } from './layout.styles';
 
 const Layout = () => {
-
   return (
     <LayoutContainer>
       <NavbarContainer>

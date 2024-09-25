@@ -22,9 +22,6 @@ export const NavbarContainer = styled.nav`
   }
 
 
-
-
-
 `;
 
 export const NavbarBrand = styled(Link)`

@@ -61,7 +61,7 @@ const SupplierForm: React.FC<{ refetchData: () => void }> = ({ refetchData }) =>
   const fetchAddressData = async (cep: string) => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      const { logradouro, bairro, localidade, uf } = response.data;
+      const { logradouro, localidade, uf } = response.data;
 
       setValue('address.street', logradouro);
       setValue('address.city', localidade);
