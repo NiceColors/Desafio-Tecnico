@@ -231,8 +231,8 @@ const SuppliersListPage: React.FC = () => {
                 width={modalSize[modalState.type!]}
             >
                 {modalState.type === 'contacts' && <SupplierContacts data={selectedSupplierData} />}
-                {modalState.type === 'create' && <SupplierForm refetchData={refetch} />}
-                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplier!, data: selectedSupplierData! }} />}
+                {modalState.type === 'create' && <SupplierForm refetchData={refetch} handleClose={handleModalClose} />}
+                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} handleClose={handleModalClose} edit={{ id: selectedSupplier!, data: selectedSupplierData! }} />}
                 {modalState.type === 'view' && <SupplierView supplier={selectedSupplierData!} />}
 
                 {modalState.type === 'delete' && (

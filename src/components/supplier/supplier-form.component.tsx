@@ -34,9 +34,10 @@ interface SupplierFormProps {
     id: string;
     data: yup.InferType<typeof supplierSchema>;
   };
+  handleClose?: () => void;
 }
 
-const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
+const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit, handleClose }) => {
   const [loading, setLoading] = React.useState(false);
 
   const { register, control, handleSubmit, setValue, formState: { errors }, trigger, reset } = useForm<yup.InferType<typeof supplierSchema>>({
@@ -64,6 +65,9 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
       else
         await axios.post('http://localhost:3000/suppliers', data);
       toast.success(edit ? 'Fornecedor atualizado com sucesso!' : 'Fornecedor criado com sucesso!');
+
+      handleClose && handleClose();
+
     } catch (error) {
       toast.error(edit ? 'Erro ao atualizar fornecedor!' : 'Erro ao criar fornecedor!');
     } finally {
