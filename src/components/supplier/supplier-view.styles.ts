@@ -92,3 +92,18 @@ export const AddressValue = styled.p`
   color: ${({ theme }) => theme.colors.grey};
 `
 
+export const ShowMap = styled.button`
+    background-color: transparent;
+    border: none;
+    color: ${({ theme }) => theme.colors.blueMedium};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+`
