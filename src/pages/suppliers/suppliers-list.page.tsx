@@ -1,92 +1,28 @@
-import axios from "axios";
 import { CirclePlus } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
 import SupplierForm from "../../components/form/supplier-form.component";
 import Modal from "../../components/modal/modal.component";
 import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/table/table.component";
 import { CreateButton, ListContainer } from "../../components/table/table.style";
+import { useDebouncedValue } from "../../hooks/useDebouncedValue";
+import { useFetch } from "../../hooks/useFetch";
 import { Content, Space } from "../../styles/globalStyle";
 
-interface ISupplierContact {
-    id: number;
-    name: string;
-    phone: string;
-}
 
-interface ISupplierAddress {
-    cep: string;
-    city: string;
-    state: string;
-    street: string;
-    number: string;
-}
+const renderAddressField = (field: keyof ISupplierAddress) => ({ address }: ISupplier) => <span>{address[field]}</span>;
 
-interface ISupplier {
-    id: number;
-    name: string;
-    description: string;
-    contato: ISupplierContact[];
-    address: ISupplierAddress;
-}
-
-const DELAY = 300;
-
-export const SuppliersListPage = () => {
-
+const SuppliersListPage = () => {
 
     const columns: IColumns[] = [
-        {
-            title: 'Nome',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Descrição',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Contatos',
-            dataIndex: 'contato',
-            key: 'contato',
-            align: 'center',
-        },
-        {
-            title: 'CEP',
-            dataIndex: 'cep',
-            key: 'cep',
-            align: 'center',
-            dataRender: ({ address }: ISupplier) => <span>{address.cep}</span>
-        },
-        {
-            title: 'Estado',
-            dataIndex: 'estado',
-            key: 'estado',
-            align: 'center',
-            dataRender: ({ address }: ISupplier) => <span>{address.state}</span>
-        },
-        {
-            title: 'Cidade',
-            dataIndex: 'cidade',
-            key: 'cidade',
-            align: 'center',
-            dataRender: ({ address }: ISupplier) => <span>{address.city}</span>
-        },
-        {
-            title: 'Logradouro',
-            dataIndex: 'logradouro',
-            key: 'logradouro',
-            align: 'center',
-            dataRender: ({ address }: ISupplier) => <span>{address.street}</span>
-        },
-        {
-            title: 'Número',
-            dataIndex: 'number',
-            key: 'number',
-            align: 'center',
-            dataRender: ({ address }: ISupplier) => <span>{address.number}</span>
-        },
+        { title: 'Nome', dataIndex: 'name', key: 'name' },
+        { title: 'Descrição', dataIndex: 'description', key: 'description' },
+        { title: 'Contatos', dataIndex: 'contato', key: 'contato', align: 'center' },
+        { title: 'CEP', dataIndex: 'cep', key: 'cep', align: 'center', dataRender: renderAddressField('cep') },
+        { title: 'Estado', dataIndex: 'estado', key: 'estado', align: 'center', dataRender: renderAddressField('state') },
+        { title: 'Cidade', dataIndex: 'cidade', key: 'cidade', align: 'center', dataRender: renderAddressField('city') },
+        { title: 'Logradouro', dataIndex: 'logradouro', key: 'logradouro', align: 'center', dataRender: renderAddressField('street') },
+        { title: 'Número', dataIndex: 'number', key: 'number', align: 'center', dataRender: renderAddressField('number') },
         {
             title: 'Ações',
             dataIndex: 'actions',
@@ -94,90 +30,44 @@ export const SuppliersListPage = () => {
             align: 'right',
             dataRender: () => (
                 <Space>
-                    <TButtonAction type="view"></TButtonAction>
-                    <TButtonAction type="edit"></TButtonAction>
-                    <TButtonAction type="delete"></TButtonAction>
+                    <TButtonAction type="view" />
+                    <TButtonAction type="edit" />
+                    <TButtonAction type="delete" />
                 </Space>
             ),
         },
     ];
 
-
-
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [providers, setProviders] = useState<ISupplier[]>([]);
-
     const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-    const [loading, setLoading] = useState(false);
+    const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
-
-    const getProviders = useCallback(async (search: string) => {
-        try {
-            setLoading(true);
-            const { data: res } = await axios.get(`http://localhost:3000/suppliers`, {
-                params: {
-                    ...search && { name_like: search }
-                }
-            });
-            setProviders(res);
-        } catch (error) {
-            toast.error('Erro ao carregar fornecedores!');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    const { data: providers, loading } = useFetch<ISupplier>(debouncedSearchTerm);
 
 
-    useEffect(() => {
-        const timerId = setTimeout(() => {
-            setDebouncedSearchTerm(searchTerm);
-        }, DELAY);
-
-        return () => {
-            clearTimeout(timerId);
-        };
-    }, [searchTerm]);
-
-    useEffect(() => {
-        if (!loading) getProviders(debouncedSearchTerm);
-    }, [debouncedSearchTerm]);
-
-    const handleSearch = (value: string) => {
-        setSearchTerm(value);
-    };
 
     return (
         <Content>
             <ListContainer>
-                <Space justifyContent="space-between" alignItems="center" margin={'16px 0px'}>
+                <Space justifyContent="space-between" alignItems="center" margin="16px 0">
                     <TableSearchInput
                         placeholder="Pesquisar..."
-                        onChange={(e) => handleSearch(e.target.value)}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />
-                    <CreateButton
-                        type="button"
-                        onClick={openModal}
-                    >
+                    <CreateButton type="button" onClick={() => setIsModalOpen(true)}>
                         <Space>
                             <CirclePlus size={18} />
                             <span>Criar</span>
                         </Space>
                     </CreateButton>
                 </Space>
-                <Table
-                    dataSource={providers ?? []}
-                    columns={columns}
-                    loading={loading}
-                />
+                <Table dataSource={providers} columns={columns} loading={loading} />
             </ListContainer>
             <Modal
                 isOpen={isModalOpen}
-                onClose={closeModal}
+                onClose={() => setIsModalOpen(false)}
                 hasCloseBtn={true}
                 closeOnOutsideClick={true}
             >
@@ -185,4 +75,6 @@ export const SuppliersListPage = () => {
             </Modal>
         </Content>
     );
-}
+};
+
+export default SuppliersListPage;

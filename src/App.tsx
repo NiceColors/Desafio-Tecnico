@@ -3,7 +3,7 @@ import { Toaster } from 'sonner'
 import { ThemeProvider } from 'styled-components'
 import Layout from './layout/layout'
 import SupplierCreatePage from './pages/suppliers/suppliers-create.page'
-import { SuppliersListPage } from './pages/suppliers/suppliers-list.page'
+import SuppliersListPage from './pages/suppliers/suppliers-list.page'
 import { GlobalStyles } from './styles/globalStyle'
 import { theme } from './theme/theme'
 function App() {
