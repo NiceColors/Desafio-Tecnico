@@ -19,7 +19,7 @@ export const STable = styled.table`
   table-layout: auto;
 
   @media (max-width: ${spaces.container.md}) {
-    thead>th:first-child,tr>td:first-child {
+    thead>tr>th:first-child,tr>td:first-child {
     position: sticky;
     left: -2px;
     z-index: 99;
@@ -31,8 +31,6 @@ export const STable = styled.table`
 `;
 
 export const SThead = styled.thead`
-  position: sticky;
-  z-index: 99;
   border-left: 2px solid ${({ theme }) => theme.colors.greyLight};
 `;
 
