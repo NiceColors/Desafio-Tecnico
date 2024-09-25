@@ -4,11 +4,15 @@ import { Space } from '../../../styles/globalStyle';
 import { spaces } from './table.variables';
 
 export const TableContent = styled.div`
-  overflow-x: auto;
   border-radius: ${spaces.sm};
   border: 1px solid ${({ theme }) => theme.colors.greyLight};
   margin-top: ${spaces.md};
   background-color: ${({ theme }) => theme.colors.white};
+
+  @media ${device.lg} {
+    overflow-x: auto;
+  }
+
 `;
 
 export const STable = styled.table`
@@ -51,7 +55,7 @@ export const STd = styled.td<{ $align?: 'center' | 'left' | 'right'; $width?: st
   text-align: ${({ $align = 'center' }) => $align};
   width: ${({ $width = 'auto' }) => (typeof $width === 'number' ? `${$width}px` : $width)};
 
-  @media (max-width: ${spaces.container.md}) {
+  @media (max-width: ${spaces.container.lg}) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
