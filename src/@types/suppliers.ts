@@ -14,7 +14,7 @@ export interface ISupplierAddress {
 }
 
 export interface ISupplier {
-    id: number;
+    id: string;
     name: string;
     description: string;
     contato: ISupplierContact[];

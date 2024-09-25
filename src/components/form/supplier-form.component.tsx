@@ -8,15 +8,11 @@ import { supplierSchema } from '../../utils/schemas/supplier.schema';
 
 import * as yup from 'yup';
 
-
-
-const notify = () => toast('Here is your toast.');
-
+import { Button } from '../../styles/globalStyle';
 import { theme } from '../../theme/theme';
 import {
   ActionContainer,
   AddContactButton,
-  Button,
   ContactItem,
   ContactList,
   ErrorMessage,
@@ -32,8 +28,9 @@ import {
   SectionTitleContainer,
 } from './supplier-form.styles';
 
-const SupplierForm: React.FC = () => {
+const SupplierForm: React.FC<{ refetchData: () => void }> = ({ refetchData }) => {
 
+  const [loading, setLoading] = React.useState(false);
 
 
   const { register, control, handleSubmit, setValue, formState: { errors }, trigger } = useForm<yup.InferType<typeof supplierSchema>>({
@@ -50,10 +47,14 @@ const SupplierForm: React.FC = () => {
 
   const onSubmit = async (data: yup.InferType<typeof supplierSchema>) => {
     try {
+      setLoading(true);
       await axios.post('http://localhost:3000/suppliers', data);
       toast.success('Fornecedor criado com sucesso!');
+      refetchData();
     } catch (error) {
       toast.error('Erro ao criar fornecedor!');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +62,7 @@ const SupplierForm: React.FC = () => {
     try {
       const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
       const { logradouro, bairro, localidade, uf } = response.data;
+
       setValue('address.street', logradouro);
       setValue('address.city', localidade);
       setValue('address.state', uf);
@@ -68,7 +70,7 @@ const SupplierForm: React.FC = () => {
       trigger()
 
     } catch (error) {
-      console.error('Erro ao buscar dados do CEP:', error);
+      toast.error('Erro ao buscar endereço!');
     }
   };
 
@@ -81,7 +83,7 @@ const SupplierForm: React.FC = () => {
         <FormSection>
 
           <SectionTitleContainer>
-            <UserRoundPlus size={36} color={theme.colors.primary} />
+            <UserRoundPlus size={28} color={theme.colors.primary} />
             <SectionTitle>
               Novo Fornecedor
             </SectionTitle>
@@ -115,7 +117,7 @@ const SupplierForm: React.FC = () => {
           <ContactList>
 
             <SectionTitleContainer>
-              <Contact size={36} color={theme.colors.primary} />
+              <Contact size={28} color={theme.colors.primary} />
               <SectionTitle>
                 Contatos
               </SectionTitle>
@@ -178,11 +180,13 @@ const SupplierForm: React.FC = () => {
 
         <FormSection>
           <SectionTitleContainer>
-            <MapPinned size={36} color={theme.colors.primary} />
+            <MapPinned size={28} color={theme.colors.primary} />
             <SectionTitle>
               Dados de Endereço
             </SectionTitle>
           </SectionTitleContainer>
+
+
 
           <FormGroup
             columns={3}
@@ -225,11 +229,7 @@ const SupplierForm: React.FC = () => {
               {errors.address?.city && <ErrorMessage>{errors.address.city.message}</ErrorMessage>}
             </FormItem>
 
-          </FormGroup>
 
-          <FormGroup
-            columns={3}
-          >
             <FormItem>
               <Label htmlFor="address.street">Logradouro <Required /></Label>
               <Input id="address.street" {...register('address.street')} />
@@ -260,7 +260,11 @@ const SupplierForm: React.FC = () => {
         </FormSection>
 
         <ActionContainer>
-          <Button type="submit">Salvar</Button>
+          <Button
+            type={loading ? 'button' : 'submit'}
+          >
+            {loading ? 'Salvando...' : 'Salvar'}
+          </Button>
         </ActionContainer>
 
       </FormContainer>

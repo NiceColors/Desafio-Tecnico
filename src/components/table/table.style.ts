@@ -26,7 +26,7 @@ export const STable = styled.table`
     thead>th:first-child,tr>td:first-child {
     position: sticky;
     left: -2px;
-    z-index: 100;
+    z-index: 99;
     background-color: ${({ theme }) => theme.colors.white};
     }
   }
@@ -36,7 +36,7 @@ export const STable = styled.table`
 
 export const SThead = styled.thead`
   position: sticky;
-  z-index: 100;
+  z-index: 99;
   border-left: 2px solid ${({ theme }) => theme.colors.greyLight};
 `;
 
@@ -116,26 +116,6 @@ export const SearchInput = styled.input`
   }
 `;
 
-export const CreateButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.blueMedium};
-  color: ${({ theme }) => theme.colors.white};
-  font-size: small;
-  border-radius: ${spaces.sm}; 
-  padding:  ${spaces.sm} ${spaces.md};
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blueDark};
-  }
-
-  @media (max-width: ${spaces.container.md}) {
-    padding: ${spaces.sm};
-    font-size: 14px;
-  }
-
-`;
 
 
 export const STButtonAction = styled.button`
@@ -151,10 +131,7 @@ export const STButtonAction = styled.button`
   gap: 5px;
   font-size: 14px;
   font-weight: 500;
-  transition: border 0.3s ease-in-out;
-  &:hover {
-    border:  1px solid ${({ theme }) => theme.colors.grey};
-  }
+  transition: all 0.1s ease-in-out;
 `;
 
 export const PaginationContainer = styled.div`
@@ -164,24 +141,6 @@ export const PaginationContainer = styled.div`
   margin-top: ${spaces.md};
 `;
 
-export const PaginationButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.blueMedium};
-  font-size: small;
-  border-radius: ${spaces.sm};
-  color: ${({ theme }) => theme.colors.white};
-  padding: ${spaces.sm}  ${spaces.md};
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blueDark};
-  }
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.greyLight};
-    cursor: not-allowed;
-  }
-`;
 
 export const PaginationInfo = styled.span`
   color: ${({ theme }) => theme.colors.textLight};

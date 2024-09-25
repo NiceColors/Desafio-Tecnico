@@ -9,4 +9,5 @@ export const colors= {
     greenLight: '#65bea4', // Verde Claro
     red: '#f73b3a', // Vermelho
     redDark: '#d32f2f', // Vermelho Escuro
+    yellow: '#f7c137', // Amarelo
 }

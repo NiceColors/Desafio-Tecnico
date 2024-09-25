@@ -1,10 +1,10 @@
 import { ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { HTMLProps, ReactNode, useRef, useState } from 'react';
 import { theme } from '../../theme/theme';
 
+import { Button } from '../../styles/globalStyle';
 import { LoadingSpinner } from '../loading.component';
 import {
-    PaginationButton,
     PaginationContainer,
     PaginationInfo,
     SearchInput,
@@ -19,6 +19,7 @@ import {
     TableSearchContainer
 } from './table.style';
 
+const ITEMS_PER_PAGE = 8;
 
 export interface IColumns {
     title: string,
@@ -30,14 +31,11 @@ export interface IColumns {
     dataRender?: (data: any) => React.ReactNode
 }
 
-const ITEMS_PER_PAGE = 8;
-
-
-
 interface ITableSearchInput extends React.InputHTMLAttributes<HTMLInputElement> {
     placeholder: string;
 }
-export const TableSearchInput = ({ placeholder, ...props }: ITableSearchInput) => {
+
+export const TableSearchInput: React.FC<ITableSearchInput> = ({ placeholder, ...props }) => {
     const ref = useRef<HTMLInputElement>(null);
 
     return (
@@ -53,13 +51,14 @@ export const TableSearchInput = ({ placeholder, ...props }: ITableSearchInput) =
     );
 }
 
-
-
-
-export const TButtonAction = ({ children, type }: {
+interface IButtonAction extends HTMLProps<HTMLButtonElement> {
     type: 'view' | 'edit' | 'delete';
-    children?: React.ReactNode;
-}) => {
+    children?: ReactNode;
+}
+
+
+export const TButtonAction: React.FC<IButtonAction> = ({ children, type, ...props }) => {
+
     const ActionIcons = {
         'delete': <Trash2 size={18} color={theme.colors.red} />,
         'edit': <UserRoundPen size={18} color={theme.colors.primary} />,
@@ -69,7 +68,7 @@ export const TButtonAction = ({ children, type }: {
     const ActualIcon = ActionIcons[type]
 
     return (
-        <STButtonAction>
+        <STButtonAction {...props}>
             {ActualIcon}
             {children}
         </STButtonAction>
@@ -84,14 +83,12 @@ interface ITable<T extends Record<string, any>> {
 }
 
 export const Table = <T extends Record<string, any>>({ dataSource, columns, loading }: ITable<T>) => {
+
     const [currentPage, setCurrentPage] = useState(1);
 
     const totalPages = Math.ceil(dataSource.length / ITEMS_PER_PAGE);
 
-    const paginatedData = dataSource.slice(
-        (currentPage - 1) * ITEMS_PER_PAGE,
-        currentPage * ITEMS_PER_PAGE
-    );
+    const paginatedData = dataSource.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
     return (
         <>
@@ -115,21 +112,21 @@ export const Table = <T extends Record<string, any>>({ dataSource, columns, load
                             >
                                 <STd align="center" colSpan={columns.length}>
                                     <LoadingSpinner />
-
                                 </STd>
                             </STr>
                         )}
 
                         {!loading && paginatedData.map((data, index) => (
                             <STr key={index}>
-                                {columns.map((column, index) => (
-                                    <>
-                                        <STd
-                                            key={index}
-                                            align={column.align as any}
-                                            width={column.width}
-                                        >{column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}</STd>
-                                    </>
+                                {columns.map((column, columnIndex) => (
+                                    <STd
+                                        key={columnIndex}
+                                        align={column.align as any}
+                                        width={column.width}
+                                    >
+                                        {column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}
+                                    </STd>
+
                                 ))}
                             </STr>
                         ))}
@@ -150,22 +147,23 @@ export const Table = <T extends Record<string, any>>({ dataSource, columns, load
                     </STBody>
                 </STable>
             </TableContent>
+
             <PaginationContainer>
-                <PaginationButton
+                <Button
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((prev) => prev - 1)}
                 >
                     Anterior
-                </PaginationButton>
+                </Button>
                 <PaginationInfo>
                     Página {currentPage} de {totalPages}
                 </PaginationInfo>
-                <PaginationButton
+                <Button
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((prev) => prev + 1)}
                 >
                     Próxima
-                </PaginationButton>
+                </Button>
             </PaginationContainer>
         </>
     );

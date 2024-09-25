@@ -10,19 +10,25 @@ export const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
+
+
+
+
 `;
 
-export const ModalContainer = styled.div`
+export const ModalContainer = styled.div<{ maxWidth?: string }>`
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  max-width: 1200px;
-  width: 100%;
-  max-height: 85%;
+  max-width: ${({ maxWidth }) => maxWidth ?? '95%'};
+  max-height: 80%;
   overflow-y: auto;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+
+  
 `;
 
 export const ModalBody = styled.div`

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device } from '../../styles/breakpoints';
 
 
 
@@ -30,19 +31,43 @@ export const SectionTitleContainer = styled.div`
 `
 
 export const SectionTitle = styled.article`
-    font-size: 1.5rem;
+    font-size: 1.225rem;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.blueDark};
 `
 
+
+export const ErrorMessage = styled.span`
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+`;
+
 export const FormGroup = styled.div<{
-    columns?: number;
-    gap?: number;
+  columns?: number;
+  gap?: number;
 }>`
     display: grid;
     grid-template-columns: repeat(${({ columns }) => columns ?? 1}, 1fr);
     gap: ${({ gap }) => gap ?? 20}px;
     margin-bottom: 1.5rem;
+
+    @media (${device.md}) {
+        grid-template-columns: repeat(${({ columns }) => columns ? columns - 1 : 1}, 1fr);
+    }
+
+    @media (${device.sm}) {
+        grid-template-columns: 1fr;
+    }
+    
+    :has(${ErrorMessage}) {
+      > input {
+        border: 1px solid ${({ theme }) => theme.colors.red};
+      }
+    }
+
+
  `
 
 export const FormItem = styled.div<{ width?: string }>`
@@ -61,32 +86,21 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-  padding: 8px;
-  border: 2px solid ${({ theme }) => theme.colors.greyLight};
-  border-radius: .5rem;
+  padding: 10px 12px;
+  border: 1px solid ${({ theme }) => theme.colors.greyLight};
+  border-radius: 10px;
   font-size: 16px;
+  transition: border-color 0.35s ease-in-out;
     &:focus {
         outline: none;
         border-color: ${({ theme }) => theme.colors.blueMedium};
         background-color: ${({ theme }) => theme.colors.white};
     }
+
+
 `;
 
-export const Button = styled.button`
-  width: 130px;
-  margin-top: 20px;
-  background-color:  ${({ theme }) => theme.colors.blueMedium};
-  color:  ${({ theme }) => theme.colors.white};
-  padding: .75rem 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease-in-out;
-  &:hover {
-   background-color: ${({ theme }) => theme.colors.blueDark};
-  }
-`;
+
 
 export const RemoveContactButton = styled.button`
     background-color:  ${({ theme }) => theme.colors.red};
@@ -133,12 +147,6 @@ export const AddContactButton = styled.button`
 `;
 
 
-export const ErrorMessage = styled.span`
-  color: red;
-  font-size: 14px;
-  margin-top: 5px;
-  display: block;
-`;
 
 export const ContactList = styled.div`
 `;

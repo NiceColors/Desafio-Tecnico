@@ -1,6 +1,6 @@
 import { Container, Content } from "../../styles/globalStyle";
 
-const Home = () => {
+const Home: React.FC = () => {
     return (
         <Container>
             <Content>
