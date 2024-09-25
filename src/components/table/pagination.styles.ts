@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Space } from '../../styles/globalStyle';
 
 export const PaginationContainer = styled.div`
     display: flex;

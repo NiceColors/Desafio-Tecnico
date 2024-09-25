@@ -158,7 +158,7 @@ const SuppliersListPage: React.FC = () => {
                 onClose={() => setIsModalOpen(false)}
                 hasCloseBtn={true}
                 closeOnOutsideClick={true}
-                width="1200px"
+                width="1300px"
             >
                 <SupplierForm refetchData={refetch} />
             </Modal>
