@@ -2,7 +2,7 @@
 export interface ISupplierContact {
     id: number;
     name: string;
-    phone: string;
+    phoneNumber: string;
 }
 
 export interface ISupplierAddress {
@@ -17,6 +17,6 @@ export interface ISupplier {
     id: string;
     name: string;
     description: string;
-    contato: ISupplierContact[];
+    contacts: ISupplierContact[];
     address: ISupplierAddress;
 }

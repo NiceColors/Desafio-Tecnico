@@ -129,13 +129,13 @@ const SupplierForm: React.FC<{ refetchData: () => void }> = ({ refetchData }) =>
                   columns={2}
                 >
                   <FormItem>
-                    <Label htmlFor={`contacts.${index}.name`}>Nome do Contato <Required /></Label>
+                    <Label htmlFor={`contacts.${index}.name`}>Nome<Required /></Label>
                     <Input id={`contacts.${index}.name`} {...register(`contacts.${index}.name`)} />
                     {errors.contacts?.[index]?.name && <ErrorMessage>{errors.contacts[index].name.message}</ErrorMessage>}
                   </FormItem>
 
                   <FormItem>
-                    <Label htmlFor={`contacts.${index}.phoneNumber`}>Número de Telefone <Required /></Label>
+                    <Label htmlFor={`contacts.${index}.phoneNumber`}>Telefone <Required /></Label>
                     <Controller
                       name={`contacts.${index}.phoneNumber`}
                       control={control}

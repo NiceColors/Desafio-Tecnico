@@ -21,7 +21,6 @@ export const NavbarContainer = styled.nav`
     gap: 1rem;
   }
 
-
 `;
 
 export const NavbarBrand = styled(Link)`

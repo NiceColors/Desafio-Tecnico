@@ -4,8 +4,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 import styled from "styled-components";
 import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
-import SupplierForm from "../../components/form/supplier-form.component";
 import Modal from "../../components/modal/modal.component";
+import { SupplierContacts } from "../../components/supplier/supplier-contacts.component";
+import SupplierForm from "../../components/supplier/supplier-form.component";
 import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/table/table.component";
 import { ListContainer, TableListActionsSpace } from "../../components/table/table.style";
 import Tooltip from "../../components/tooltip.component";
@@ -25,22 +26,21 @@ const DeleteSupplierContainer = styled.div`
     margin: 0 auto;
     
     h1, h1 strong {
-        font-size: 2rem;
+        font-size: xx-large;
         color: ${theme.colors.redDark};
         text-align: center;
         @media ${device.sm}{
-            font-size: 1.5rem;
+            font-size:x-large
         }
     }
     
     p {
-        font-size: 1rem;
         text-align: center;
         color: ${theme.colors.textLight};
         margin-bottom: 18px;
 
         @media ${device.sm}{
-            font-size: 0.875rem;
+            font-size: small;
         }
     }
 
@@ -67,18 +67,29 @@ const DeleteSupplierContainer = styled.div`
     }
 `
 
+const ViewContact = styled.button`
+    color: ${theme.colors.blueMedium};
+    font-size: medium;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+`
+
 const renderAddressField = (field: keyof ISupplierAddress) => ({ address }: ISupplier) => <span>{address[field]}</span>;
 
 
+
 const SuppliersListPage: React.FC = () => {
+
 
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
     const [selectedSupplier, setSelectedSupplier] = useState<ISupplier | null>(null);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const { data: providers, loading, refetch } = useFetch<ISupplier>('http://localhost:3000/suppliers', debouncedSearchTerm);
 
@@ -94,9 +105,23 @@ const SuppliersListPage: React.FC = () => {
     }
 
 
-    const handleDeleteSupplierById = (supplier: ISupplier) => {
+    const handleDeleteSupplier = (supplier: ISupplier): void => {
         setSelectedSupplier(supplier);
         setIsDeleteModalOpen(true);
+    }
+
+    const handleViewSupplierContacts = (supplier: ISupplier): void => {
+        setSelectedSupplier(supplier);
+        setIsContactModalOpen(true);
+    }
+
+    const handleCloseViewContact = (): void => {
+        setIsContactModalOpen(false);
+        setSelectedSupplier(null);
+    }
+
+    const handleCreateSupplier = (): void => {
+        setIsModalOpen(true);
     }
 
 
@@ -104,7 +129,19 @@ const SuppliersListPage: React.FC = () => {
     const columns: IColumns[] = [
         { title: 'Nome', dataIndex: 'name', key: 'name' },
         { title: 'Descrição', dataIndex: 'description', key: 'description' },
-        { title: 'Contatos', dataIndex: 'contato', key: 'contato', align: 'center' },
+        {
+            title: 'Contatos',
+            dataIndex: 'contato',
+            key: 'contato',
+            align: 'center',
+            dataRender: (record: ISupplier) => (
+                <div>
+                    <ViewContact onClick={() => handleViewSupplierContacts(record)}>
+                        Visualizar
+                    </ViewContact>
+                </div>
+            )
+        },
         { title: 'CEP', dataIndex: 'cep', key: 'cep', align: 'center', dataRender: renderAddressField('cep') },
         { title: 'Estado', dataIndex: 'estado', key: 'estado', align: 'center', dataRender: renderAddressField('state') },
         { title: 'Cidade', dataIndex: 'cidade', key: 'cidade', align: 'center', dataRender: renderAddressField('city') },
@@ -115,11 +152,8 @@ const SuppliersListPage: React.FC = () => {
             dataIndex: 'actions',
             key: 'actions',
             align: 'right',
-            dataRender: (data) => (
+            dataRender: (data: ISupplier) => (
                 <Space>
-
-
-
                     <Tooltip text="Visualizar" >
                         <TButtonAction type="view" />
                     </Tooltip>
@@ -129,7 +163,7 @@ const SuppliersListPage: React.FC = () => {
                     </Tooltip>
 
                     <Tooltip text="Deletar" type="danger" >
-                        <TButtonAction type="delete" onClick={() => handleDeleteSupplierById(data)} />
+                        <TButtonAction type="delete" onClick={() => handleDeleteSupplier(data)} />
                     </Tooltip>
                 </Space>
             ),
@@ -146,13 +180,28 @@ const SuppliersListPage: React.FC = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />
-                    <Button type="button" onClick={() => setIsModalOpen(true)}>
+                    <Button type="button" onClick={handleCreateSupplier}>
                         <CirclePlus size={18} />
                         <span>Criar</span>
                     </Button>
                 </TableListActionsSpace>
-                <Table dataSource={providers} columns={columns} loading={loading} />
+                <Table
+                    dataSource={providers}
+                    columns={columns}
+                    loading={loading}
+                />
             </ListContainer>
+
+            <Modal
+                isOpen={isContactModalOpen}
+                onClose={() => handleCloseViewContact()}
+                hasCloseBtn={true}
+                closeOnOutsideClick={true}
+                width="600px"
+            >
+                <SupplierContacts data={selectedSupplier} />
+            </Modal>
+
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

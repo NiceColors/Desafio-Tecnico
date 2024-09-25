@@ -31,7 +31,7 @@ export const SectionTitleContainer = styled.div`
 `
 
 export const SectionTitle = styled.article`
-    font-size: 1.225rem;
+    font-size: x-large;
     font-weight: bold;
     color: ${({ theme }) => theme.colors.blueDark};
 `

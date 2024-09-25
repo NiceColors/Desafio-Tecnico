@@ -12,7 +12,15 @@
       },
       "contacts": [
         {
-          "name": "teste",
+          "name": "Luis Felipe",
+          "phoneNumber": "(32) 42424-2342"
+        },
+        {
+          "name": "Luis Felipe",
+          "phoneNumber": "(32) 42424-2342"
+        },
+        {
+          "name": "Luis Felipe",
           "phoneNumber": "(32) 42424-2342"
         }
       ],

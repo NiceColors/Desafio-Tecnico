@@ -12,7 +12,6 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <Toaster richColors position='top-right' />
-
         <Routes>
           <Route element={<Layout />}>
             <Route path="*" element={<SuppliersListPage />} />

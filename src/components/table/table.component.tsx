@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, ScanEye, Trash2, UserRoundPen, UserSearch } 
 import { HTMLProps, ReactNode, useEffect, useRef, useState } from 'react';
 import { theme } from '../../theme/theme';
 
+import { Space } from '../../styles/globalStyle';
 import { LoadingSpinner } from '../loading.component';
 import { PageNumberButton, PageNumbersContainer, PaginationButton } from './pagination.styles';
 import {
@@ -17,7 +18,6 @@ import {
     TableContent,
     TableSearchContainer
 } from './table.style';
-import { Space } from '../../styles/globalStyle';
 
 const ITEMS_PER_PAGE = 8;
 
@@ -25,9 +25,9 @@ export interface IColumns {
     title: string,
     dataIndex: string,
     key: string,
-    align?: string,
+    align?: 'center' | 'left' | 'right',
     width?: string,
-    fixed?: boolean,
+    exampandable?: boolean,
     dataRender?: (data: any) => React.ReactNode
 }
 
@@ -79,6 +79,7 @@ interface ITable<T extends Record<string, any>> {
     dataSource: T[],
     columns: IColumns[],
     loading?: boolean
+    // expandedRowRender?: (data: T) => ReactNode
 }
 
 
@@ -86,6 +87,7 @@ export const Table = <T extends Record<string, any>>({
     dataSource,
     columns,
     loading,
+    // expandedRowRender
 }: ITable<T>) => {
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -105,6 +107,7 @@ export const Table = <T extends Record<string, any>>({
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+
 
     const renderPageNumbers = () => {
         const pageNumbers = [];
@@ -146,24 +149,32 @@ export const Table = <T extends Record<string, any>>({
                             </STr>
                         )}
 
-                        {!loading &&
-                            paginatedData.map((data, index) => (
+                        {!loading && paginatedData.map((data, index) => (
+                            <>
                                 <STr key={index}>
                                     {columns.map((column, columnIndex) => (
                                         <STd
                                             key={columnIndex}
-                                            align={column.align as any}
+                                            align={column.align}
                                             width={column.width}
                                         >
-                                            {column.dataRender
-                                                ? column.dataRender(data)
-                                                : (data as Record<string, any>)[
-                                                column.dataIndex
-                                                ]}
+                                            {column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}
                                         </STd>
                                     ))}
                                 </STr>
-                            ))}
+
+
+
+                                {/* 
+                                {expandedRowRender && (
+                                    <STr>
+                                        <STd colSpan={columns.length}>
+                                            {expandedRowRender(data)}
+                                        </STd>
+                                    </STr>
+                                )} */}
+                            </>
+                        ))}
 
                         {!loading && paginatedData.length === 0 && (
                             <STr
