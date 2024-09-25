@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
 import { X } from "lucide-react";
-import { 
-  ModalOverlay, 
-  ModalContainer, 
-  ModalBody, 
-  CloseModalButton 
+import React, { useEffect, useRef } from "react";
+import {
+  CloseModalButton,
+  ModalBody,
+  ModalContainer,
+  ModalOverlay
 } from "./modal.style";
 
 interface ModalProps {
@@ -13,6 +13,7 @@ interface ModalProps {
   children: React.ReactNode;
   hasCloseBtn?: boolean;
   closeOnOutsideClick?: boolean;
+  width?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -20,7 +21,8 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   children,
   hasCloseBtn = true,
-  closeOnOutsideClick = false
+  closeOnOutsideClick = false,
+  width
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <ModalOverlay>
-      <ModalContainer ref={modalRef} role="dialog" aria-modal="true">
+      <ModalContainer width={width} ref={modalRef} role="dialog" aria-modal="true">
         {hasCloseBtn && (
           <CloseModalButton onClick={onClose} aria-label="Fechar modal">
             <X />
