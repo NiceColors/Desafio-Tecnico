@@ -27,7 +27,7 @@ export const theme = {
     },
     margins: {
         pageTop: '30px',
-        features: '20px',
+        features: '10px',
     },
     fontWeights: {
         normal: 400,

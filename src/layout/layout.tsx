@@ -12,7 +12,7 @@ const Layout = () => {
   return (
     <LayoutContainer>
       <NavbarContainer>
-        <NavbarBrand to="/app/providers">
+        <NavbarBrand to="/app/suppliers">
           <img src="/logo-white.png" alt="" />
         </NavbarBrand>
       </NavbarContainer>

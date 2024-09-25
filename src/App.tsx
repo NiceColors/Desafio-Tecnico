@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
+import { Toaster } from 'sonner'
 import { ThemeProvider } from 'styled-components'
 import Layout from './layout/layout'
-import ProvidersCreatePage from './pages/providers/providers-create.page'
-import { ProvidersListPage } from './pages/providers/providers-list.page'
+import SupplierCreatePage from './pages/suppliers/suppliers-create.page'
+import { SuppliersListPage } from './pages/suppliers/suppliers-list.page'
 import { GlobalStyles } from './styles/globalStyle'
 import { theme } from './theme/theme'
 function App() {
@@ -11,10 +12,12 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
+        <Toaster richColors position='top-right' />
+
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/app/providers" element={<ProvidersListPage />} />
-            <Route path="/app/providers/create" element={<ProvidersCreatePage />} />
+            <Route path="/app/suppliers" element={<SuppliersListPage />} />
+            <Route path="/app/suppliers/create" element={<SupplierCreatePage />} />
 
           </Route>
         </Routes>

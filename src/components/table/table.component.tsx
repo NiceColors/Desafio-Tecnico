@@ -75,18 +75,23 @@ export const TButtonAction = ({ children, type }: {
     );
 }
 
-export const Table = ({ dataSource = [], columns }: {
-    dataSource: any[],
+
+interface ITable<T extends Record<string, any>> {
+    dataSource: T[],
     columns: IColumns[],
-}) => {
+}
+
+export const Table = <T extends Record<string, any>>({ dataSource, columns }: ITable<T>) => {
     const [currentPage, setCurrentPage] = useState(1);
+
     const [search, setSearch] = useState("");
 
-    const filteredData = dataSource.filter((data) =>
-        Object.values(data).some((value: any) =>
-            value.toString().toLowerCase().includes(search.toLowerCase())
-        )
-    );
+    
+
+
+    const filteredData = dataSource.filter((data) => data && Object.values(data).some((value: any) =>
+        value.toString().toLowerCase().includes(search.toLowerCase())
+    ));
 
     const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
 
@@ -127,8 +132,7 @@ export const Table = ({ dataSource = [], columns }: {
                                             key={index}
                                             align={column.align as any}
                                             width={column.width}
-                                        >{column.dataRender ? column.dataRender(data) : data[column.dataIndex]}</STd>
-
+                                        >{column.dataRender ? column.dataRender(data) : (data as Record<string, any>)[column.dataIndex]}</STd>
                                     </>
                                 ))}
                             </STr>
