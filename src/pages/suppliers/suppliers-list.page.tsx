@@ -1,22 +1,22 @@
 import axios from "axios";
 import { CirclePlus } from "lucide-react";
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { toast } from "sonner";
 import styled from "styled-components";
 import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
-import Modal from "../../components/modal/modal.component";
 import { SupplierContacts } from "../../components/supplier/supplier-contacts.component";
 import SupplierForm from "../../components/supplier/supplier-form.component";
-import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/table/table.component";
-import { ListContainer, TableListActionsSpace } from "../../components/table/table.style";
-import Tooltip from "../../components/tooltip.component";
+import SupplierView from "../../components/supplier/supplier-view.component";
+import Tooltip from "../../components/ui/loading/tooltip.component";
+import Modal from "../../components/ui/modal/modal.component";
+import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/ui/table/table.component";
+import { ListContainer, TableListActionsSpace } from "../../components/ui/table/table.style";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useFetch } from "../../hooks/useFetch";
-import { device } from "../../styles/breakpoints";
 import { Button, Content, Space } from "../../styles/globalStyle";
 import { theme } from "../../theme/theme";
 
-const DeleteSupplierContainer = styled.div`
+const DeleteContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,30 +29,22 @@ const DeleteSupplierContainer = styled.div`
         font-size: xx-large;
         color: ${theme.colors.redDark};
         text-align: center;
-        @media ${device.sm}{
-            font-size:x-large
-        }
     }
     
     p {
         text-align: center;
         color: ${theme.colors.textLight};
         margin-bottom: 18px;
-
-        @media ${device.sm}{
-            font-size: small;
-        }
     }
 
     ${Space} {
         width: 100%;
     }
 
-    ${Button}{
+    ${Button} {
         background-color: ${theme.colors.greyLight};
         color: ${theme.colors.textLight};
         &:hover {
-            background-color: ${theme.colors.greyLight};
             filter: brightness(0.9);
         }
     }
@@ -60,11 +52,7 @@ const DeleteSupplierContainer = styled.div`
    ${Button} + ${Button} {
         background-color: ${theme.colors.red};
         color: ${theme.colors.white};
-        &:hover {
-            background-color: ${theme.colors.red};
-            filter: brightness(0.9);
-        }
-    }
+   }
 `
 
 const ViewContact = styled.button`
@@ -77,24 +65,21 @@ const ViewContact = styled.button`
 
 const renderAddressField = (field: keyof ISupplierAddress) => ({ address }: ISupplier) => <span>{address[field]}</span>;
 
-
+interface ModalState {
+    type: 'create' | 'edit' | 'delete' | 'view' | 'contacts' | null;
+    isOpen: boolean;
+}
 
 const SuppliersListPage: React.FC = () => {
-
-
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-
+    const [modalState, setModalState] = useState<ModalState>({ type: null, isOpen: false });
     const [selectedSupplier, setSelectedSupplier] = useState<ISupplier | null>(null);
 
     const { data: providers, loading, refetch } = useFetch<ISupplier>('http://localhost:3000/suppliers', debouncedSearchTerm);
 
-
-    const deleteSupplierById = async (id: string) => {
+    const deleteSupplierById = useCallback(async (id: string) => {
         try {
             await axios.delete(`http://localhost:3000/suppliers/${id}`);
             toast.success('Fornecedor deletado com sucesso!');
@@ -102,29 +87,17 @@ const SuppliersListPage: React.FC = () => {
         } catch (error) {
             toast.error('Erro ao deletar fornecedor!');
         }
-    }
+    }, [refetch]);
 
+    const handleModalOpen = useCallback((type: ModalState['type'], supplier?: ISupplier) => {
+        setSelectedSupplier(supplier || null);
+        setModalState({ type, isOpen: true });
+    }, []);
 
-    const handleDeleteSupplier = (supplier: ISupplier): void => {
-        setSelectedSupplier(supplier);
-        setIsDeleteModalOpen(true);
-    }
-
-    const handleViewSupplierContacts = (supplier: ISupplier): void => {
-        setSelectedSupplier(supplier);
-        setIsContactModalOpen(true);
-    }
-
-    const handleCloseViewContact = (): void => {
-        setIsContactModalOpen(false);
+    const handleModalClose = useCallback(() => {
+        setModalState({ type: null, isOpen: false });
         setSelectedSupplier(null);
-    }
-
-    const handleCreateSupplier = (): void => {
-        setIsModalOpen(true);
-    }
-
-
+    }, []);
 
     const columns: IColumns[] = [
         { title: 'Nome', dataIndex: 'name', key: 'name' },
@@ -135,11 +108,9 @@ const SuppliersListPage: React.FC = () => {
             key: 'contato',
             align: 'center',
             dataRender: (record: ISupplier) => (
-                <div>
-                    <ViewContact onClick={() => handleViewSupplierContacts(record)}>
-                        Visualizar
-                    </ViewContact>
-                </div>
+                <ViewContact onClick={() => handleModalOpen('contacts', record)}>
+                    Visualizar
+                </ViewContact>
             )
         },
         { title: 'CEP', dataIndex: 'cep', key: 'cep', align: 'center', dataRender: renderAddressField('cep') },
@@ -154,22 +125,28 @@ const SuppliersListPage: React.FC = () => {
             align: 'right',
             dataRender: (data: ISupplier) => (
                 <Space>
-                    <Tooltip text="Visualizar" >
-                        <TButtonAction type="view" />
+                    <Tooltip text="Visualizar">
+                        <TButtonAction type="view" onClick={() => handleModalOpen('view', data)} />
                     </Tooltip>
-
-                    <Tooltip text="Editar" >
-                        <TButtonAction type="edit" />
+                    <Tooltip text="Editar">
+                        <TButtonAction type="edit" onClick={() => handleModalOpen('edit', data)} />
                     </Tooltip>
-
-                    <Tooltip text="Deletar" type="danger" >
-                        <TButtonAction type="delete" onClick={() => handleDeleteSupplier(data)} />
+                    <Tooltip text="Deletar" type="danger">
+                        <TButtonAction type="delete" onClick={() => handleModalOpen('delete', data)} />
                     </Tooltip>
                 </Space>
             ),
         },
     ];
 
+
+    const modalSize= {
+        contacts: "700px",
+        create: "1300px",
+        edit: "1300px",
+        view: "800px",
+        delete: "380px",
+    }
 
     return (
         <Content>
@@ -180,7 +157,7 @@ const SuppliersListPage: React.FC = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />
-                    <Button type="button" onClick={handleCreateSupplier}>
+                    <Button type="button" onClick={() => handleModalOpen('create')}>
                         <CirclePlus size={18} />
                         <span>Criar</span>
                     </Button>
@@ -193,45 +170,31 @@ const SuppliersListPage: React.FC = () => {
             </ListContainer>
 
             <Modal
-                isOpen={isContactModalOpen}
-                onClose={() => handleCloseViewContact()}
+                isOpen={modalState.isOpen}
+                onClose={handleModalClose}
                 hasCloseBtn={true}
                 closeOnOutsideClick={true}
-                width="600px"
+                width={modalSize[modalState.type!]}
             >
-                <SupplierContacts data={selectedSupplier} />
-            </Modal>
+                {modalState.type === 'contacts' && <SupplierContacts data={selectedSupplier} />}
+                {modalState.type === 'create' && <SupplierForm refetchData={refetch} />}
+                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplier?.id!, data: selectedSupplier! }} />}
+                {modalState.type === 'view' && <SupplierView supplier={selectedSupplier!} />}
 
-            <Modal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                hasCloseBtn={true}
-                closeOnOutsideClick={true}
-                width="1300px"
-            >
-                <SupplierForm refetchData={refetch} />
+                {modalState.type === 'delete' && (
+                    <DeleteContainer>
+                        <h1><strong>Deletar Fornecedor</strong></h1>
+                        <p>Você tem certeza que deseja deletar o fornecedor <strong>{selectedSupplier?.name}</strong>?</p>
+                        <Space justifyContent="space-between">
+                            <Button type="button" onClick={handleModalClose}>Cancelar</Button>
+                            <Button type="button" onClick={() => {
+                                deleteSupplierById(selectedSupplier?.id!);
+                                handleModalClose();
+                            }}>Deletar</Button>
+                        </Space>
+                    </DeleteContainer>
+                )}
             </Modal>
-
-            <Modal
-                isOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                hasCloseBtn={true}
-                closeOnOutsideClick={true}
-                width="380px"
-            >
-                <DeleteSupplierContainer>
-                    <h1><strong>Deletar Fornecedor</strong></h1>
-                    <p>Você tem certeza que deseja deletar o fornecedor <strong>{selectedSupplier?.name}</strong>?</p>
-                    <Space justifyContent="space-between">
-                        <Button type="button" onClick={() => setIsDeleteModalOpen(false)}>Cancelar</Button>
-                        <Button type="button" onClick={() => {
-                            deleteSupplierById(selectedSupplier?.id!);
-                            setIsDeleteModalOpen(false);
-                        }}>Deletar</Button>
-                    </Space>
-                </DeleteSupplierContainer>
-            </Modal>
-
         </Content>
     );
 };

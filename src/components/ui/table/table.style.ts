@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import { device } from '../../../styles/breakpoints';
+import { Space } from '../../../styles/globalStyle';
 import { spaces } from './table.variables';
-import { device } from '../../styles/breakpoints';
-import { Space } from '../../styles/globalStyle';
 
 
 export const ListContainer = styled.div`
@@ -78,7 +78,7 @@ export const STr = styled.tr`
 `;
 
 export const STBody = styled.tbody`
-  border-left: 2px solid ${({ theme }) => theme.colors.greenLight};
+  border-left: 2px solid ${({ theme }) => theme.colors.blueMedium};
   border-collapse: separate;
 
 `;

@@ -24,8 +24,8 @@
           "phoneNumber": "(32) 42424-2342"
         }
       ],
-      "description": "teste",
-      "name": "teste"
+      "description": "Gerente",
+      "name": "Victor Batista"
     },
     {
       "id": "f284",
@@ -330,6 +330,25 @@
       "description": "testa",
       "name": "Romeu",
       "id": "YHKFM3g"
+    },
+    {
+      "address": {
+        "reference": "",
+        "number": 33,
+        "street": "Rua Maria José",
+        "city": "Nova Iguaçu",
+        "state": "RJ",
+        "cep": "26290-093"
+      },
+      "contacts": [
+        {
+          "name": "teste",
+          "phoneNumber": "(33) 33333-3333"
+        }
+      ],
+      "description": "teste",
+      "name": "teste",
+      "id": "M6hR8iQ"
     }
   ]
 }

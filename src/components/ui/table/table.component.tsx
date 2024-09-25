@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight, ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
 import { HTMLProps, ReactNode, useEffect, useRef, useState } from 'react';
-import { theme } from '../../theme/theme';
+import { theme } from '../../../theme/theme';
 
-import { Space } from '../../styles/globalStyle';
-import { LoadingSpinner } from '../loading.component';
+import { Space } from '../../../styles/globalStyle';
+import { LoadingSpinner } from '../loading/loading.component';
 import { PageNumberButton, PageNumbersContainer, PaginationButton } from './pagination.styles';
 import {
     PaginationContainer,
