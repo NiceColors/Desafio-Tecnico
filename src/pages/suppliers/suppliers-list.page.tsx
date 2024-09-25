@@ -72,7 +72,7 @@ interface ModalState {
 
 const SuppliersListPage: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const debouncedSearchTerm = useDebouncedValue(searchTerm, 300);
+    const debouncedSearchTerm = useDebouncedValue(searchTerm, 700);
 
     const [modalState, setModalState] = useState<ModalState>({ type: null, isOpen: false });
     const [selectedSupplier, setSelectedSupplier] = useState<ISupplier | null>(null);

@@ -30,22 +30,7 @@ export const NavbarBrand = styled(Link)`
   text-decoration: none;
 `;
 
-export const NavbarLinks = styled.div`
-  display: flex;
-  gap: 1rem;
 
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const NavbarLink = styled(Link)`
-  color: ${({ theme }) => theme.colors.white};
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 export const MainContent = styled.main`
   flex: 1;

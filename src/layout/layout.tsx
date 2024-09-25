@@ -4,7 +4,7 @@ import {
   LayoutContainer,
   MainContent,
   NavbarBrand,
-  NavbarContainer
+  NavbarContainer,
 } from './layout.styles';
 
 const Layout = () => {
@@ -19,7 +19,7 @@ const Layout = () => {
         <Outlet />
       </MainContent>
       <FooterContainer>
-        <p> 2024 - Desáfio VExpenses. Feito por Victor Batista</p>
+        <p> 2024 - Desafio VExpenses. Feito por Victor Batista</p>
       </FooterContainer>
     </LayoutContainer>
   );
