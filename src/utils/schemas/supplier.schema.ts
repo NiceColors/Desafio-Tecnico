@@ -8,7 +8,10 @@ const REGEX_CEP_FORMAT = /^\d{5}-\d{3}$/
 
 export const supplierSchema = yup.object().shape({
     name: yup.string().required('Nome é obrigatório').matches(REGEX_ALPHANUMERIC_FORMAT, 'Nome inválido'),
-    description: yup.string().matches(REGEX_ALPHANUMERIC_FORMAT, 'Descrição inválida'),
+    description: yup.string().matches(REGEX_ALPHANUMERIC_FORMAT, {
+        excludeEmptyString: true,
+        message: 'Descrição inválida'
+    }),
     contacts: yup.array().of(
         yup.object().shape({
             name: yup.string().required('Nome do contato é obrigatório').matches(REGEX_ALPHANUMERIC_FORMAT, 'Nome do contato deve ser alfabético'),
