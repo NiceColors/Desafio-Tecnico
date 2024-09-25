@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ScanEye, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ScanEye, Search, Trash2, UserRoundPen, UserSearch } from 'lucide-react';
 import { HTMLProps, ReactNode, useEffect, useRef, useState } from 'react';
 import { theme } from '../../../theme/theme';
 
@@ -41,7 +41,7 @@ export const TableSearchInput: React.FC<ITableSearchInput> = ({ placeholder, ...
 
     return (
         <TableSearchContainer>
-            <UserSearch
+            <Search
                 onClick={() => {
                     ref.current?.focus()
                 }}

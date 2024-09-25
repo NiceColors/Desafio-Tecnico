@@ -7,15 +7,20 @@ import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
 import { SupplierContacts } from "../../components/supplier/supplier-contacts.component";
 import SupplierForm from "../../components/supplier/supplier-form.component";
 import SupplierView from "../../components/supplier/supplier-view.component";
+import { ListContainer, ListHeader, ListHeaderDescription, ListHeaderTitle } from "../../components/ui/list/list.style";
 import Tooltip from "../../components/ui/loading/tooltip.component";
 import Modal from "../../components/ui/modal/modal.component";
 import { IColumns, Table, TableSearchInput, TButtonAction } from "../../components/ui/table/table.component";
-import { ListContainer, TableListActionsSpace } from "../../components/ui/table/table.style";
+import { TableListActionsSpace } from "../../components/ui/table/table.style";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
 import { useFetch } from "../../hooks/useFetch";
 import { Button, Content, Space } from "../../styles/globalStyle";
 import { theme } from "../../theme/theme";
 import { exportToCSV } from "../../utils/functions/exports";
+
+
+
+
 
 const DeleteContainer = styled.div`
     display: flex;
@@ -176,9 +181,18 @@ const SuppliersListPage: React.FC = () => {
     return (
         <Content>
             <ListContainer>
+                <ListHeader>
+                    <ListHeaderTitle>
+                        Fornecedores
+                    </ListHeaderTitle>
+                    <ListHeaderDescription>
+                        Lista de fornecedores cadastrados
+                    </ListHeaderDescription>
+                </ListHeader>
+
                 <TableListActionsSpace justifyContent="space-between" alignItems="center" margin="16px 0">
                     <TableSearchInput
-                        placeholder="Pesquisar..."
+                        placeholder="Pesquisar nome..."
                         onChange={(e) => setSearchTerm(e.target.value)}
                         value={searchTerm}
                     />

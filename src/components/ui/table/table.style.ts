@@ -4,10 +4,6 @@ import { Space } from '../../../styles/globalStyle';
 import { spaces } from './table.variables';
 
 
-export const ListContainer = styled.div`
-  width: 100%;
-  padding: ${spaces.sm};
-`;
 
 export const TableContent = styled.div`
   overflow-x: auto;
@@ -70,8 +66,9 @@ export const STd = styled.td<{ align?: 'center' | 'left' | 'right'; width?: stri
 
 export const STr = styled.tr`
   background: ${({ theme }) => theme.colors.white};
+  transition: background 0.2s ease-in-out;
   &:hover {
-    background-color: #f1f1f1;
+    background-color: ${({ theme }) => theme.colors.greyLight};
   }
 
 
