@@ -15,7 +15,7 @@ function App() {
 
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/app/suppliers" element={<SuppliersListPage />} />
+            <Route path="*" element={<SuppliersListPage />} />
           </Route>
         </Routes>
       </ThemeProvider>
