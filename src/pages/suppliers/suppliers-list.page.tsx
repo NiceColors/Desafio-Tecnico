@@ -97,15 +97,15 @@ const SuppliersListPage: React.FC = () => {
             }).join(' - ');
 
             return {
-                Nome: supplier.name,
-                Descrição: supplier.description,
-                Contatos: contacts,
-                CEP: supplier.address.cep,
-                Estado: supplier.address.state,
-                Cidade: supplier.address.city,
-                Logradouro: supplier.address.street,
-                Número: supplier.address.number,
-                Referência: supplier.address.reference,
+                ['Nome']: supplier.name,
+                ['Descricao']: supplier.description,
+                ['Contatos']: contacts,
+                ['CEP']: supplier.address.cep,
+                ['Estado']: supplier.address.state,
+                ['Cidade']: supplier.address.city,
+                ['Logradouro']: supplier.address.street,
+                ['Numero']: supplier.address.number,
+                ['Referencia']: supplier.address.reference,
             }
         });
 
