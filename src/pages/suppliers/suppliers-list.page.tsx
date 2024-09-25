@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CirclePlus, FileDown } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 import styled from "styled-components";
 import { ISupplier, ISupplierAddress } from "../../@types/suppliers";
@@ -17,10 +17,6 @@ import { useFetch } from "../../hooks/useFetch";
 import { Button, Content, Space } from "../../styles/globalStyle";
 import { theme } from "../../theme/theme";
 import { exportToCSV } from "../../utils/functions/exports";
-
-
-
-
 
 const DeleteContainer = styled.div`
     display: flex;
@@ -81,35 +77,42 @@ const SuppliersListPage: React.FC = () => {
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 700);
 
     const [modalState, setModalState] = useState<ModalState>({ type: null, isOpen: false });
-    const [selectedSupplier, setSelectedSupplier] = useState<ISupplier | null>(null);
+    const [selectedSupplier, setSelectedSupplier] = useState<string | null>(null);
 
-    const { data: providers, loading, refetch } = useFetch<ISupplier>('http://localhost:3000/suppliers', debouncedSearchTerm);
 
+    const { data: suppliers, loading, refetch } = useFetch<ISupplier>('http://localhost:3000/suppliers', debouncedSearchTerm);
+
+
+    const suppliersMap = useMemo(() => {
+        return new Map<string, ISupplier>(suppliers.map(supplier => [supplier.id, supplier]));
+    }, [suppliers]);
+
+    const selectedSupplierData = selectedSupplier ? suppliersMap.get(selectedSupplier) || null : null;
 
     const exportSuppliersToCSV = () => {
-        const formattedProviders = providers.map(provider => {
+        const formattedSuppliers = suppliers.map(supplier => {
 
-            const contacts = provider.contacts.map(contact => {
+            const contacts = supplier.contacts.map(contact => {
                 return `${contact.name}: ${contact.phone}`;
             }).join(' - ');
 
             return {
-                Nome: provider.name,
-                Descrição: provider.description,
+                Nome: supplier.name,
+                Descrição: supplier.description,
                 Contatos: contacts,
-                CEP: provider.address.cep,
-                Estado: provider.address.state,
-                Cidade: provider.address.city,
-                Logradouro: provider.address.street,
-                Número: provider.address.number,
-                Referência: provider.address.reference,
+                CEP: supplier.address.cep,
+                Estado: supplier.address.state,
+                Cidade: supplier.address.city,
+                Logradouro: supplier.address.street,
+                Número: supplier.address.number,
+                Referência: supplier.address.reference,
             }
         });
 
-        exportToCSV('fornecedores', formattedProviders);
+        exportToCSV('fornecedores', formattedSuppliers);
     }
 
-    const deleteSupplierById = useCallback(async (id: string) => {
+    const deleteSupplierById = async (id: string) => {
         try {
             await axios.delete(`http://localhost:3000/suppliers/${id}`);
             toast.success('Fornecedor deletado com sucesso!');
@@ -117,17 +120,17 @@ const SuppliersListPage: React.FC = () => {
         } catch (error) {
             toast.error('Erro ao deletar fornecedor!');
         }
-    }, [refetch]);
+    }
 
-    const handleModalOpen = useCallback((type: ModalState['type'], supplier?: ISupplier) => {
-        setSelectedSupplier(supplier || null);
+    const handleModalOpen = (type: ModalState['type'], supplierId: string | null = null) => {
+        if (supplierId) setSelectedSupplier(supplierId);
         setModalState({ type, isOpen: true });
-    }, []);
+    }
 
-    const handleModalClose = useCallback(() => {
+    const handleModalClose = () => {
         setModalState({ type: null, isOpen: false });
         setSelectedSupplier(null);
-    }, []);
+    };
 
     const columns: IColumns[] = [
         { title: 'Nome', dataIndex: 'name', key: 'name' },
@@ -138,7 +141,7 @@ const SuppliersListPage: React.FC = () => {
             key: 'contato',
             align: 'center',
             dataRender: (record: ISupplier) => (
-                <ViewContact onClick={() => handleModalOpen('contacts', record)}>
+                <ViewContact onClick={() => handleModalOpen('contacts', record.id)}>
                     Visualizar
                 </ViewContact>
             )
@@ -153,16 +156,16 @@ const SuppliersListPage: React.FC = () => {
             dataIndex: 'actions',
             key: 'actions',
             align: 'right',
-            dataRender: (data: ISupplier) => (
+            dataRender: (record: ISupplier) => (
                 <Space>
                     <Tooltip text="Visualizar">
-                        <TButtonAction type="view" onClick={() => handleModalOpen('view', data)} />
+                        <TButtonAction type="view" onClick={() => handleModalOpen('view', record.id)} />
                     </Tooltip>
                     <Tooltip text="Editar">
-                        <TButtonAction type="edit" onClick={() => handleModalOpen('edit', data)} />
+                        <TButtonAction type="edit" onClick={() => handleModalOpen('edit', record.id)} />
                     </Tooltip>
                     <Tooltip text="Deletar" type="danger">
-                        <TButtonAction type="delete" onClick={() => handleModalOpen('delete', data)} />
+                        <TButtonAction type="delete" onClick={() => handleModalOpen('delete', record.id)} />
                     </Tooltip>
                 </Space>
             ),
@@ -211,7 +214,7 @@ const SuppliersListPage: React.FC = () => {
                     </Space>
                 </TableListActionsSpace>
                 <Table
-                    dataSource={providers}
+                    dataSource={suppliers}
                     columns={columns}
                     loading={loading}
                 />
@@ -224,19 +227,19 @@ const SuppliersListPage: React.FC = () => {
                 closeOnOutsideClick={true}
                 width={modalSize[modalState.type!]}
             >
-                {modalState.type === 'contacts' && <SupplierContacts data={selectedSupplier} />}
+                {modalState.type === 'contacts' && <SupplierContacts data={selectedSupplierData} />}
                 {modalState.type === 'create' && <SupplierForm refetchData={refetch} />}
-                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplier?.id!, data: selectedSupplier! }} />}
-                {modalState.type === 'view' && <SupplierView supplier={selectedSupplier!} />}
+                {modalState.type === 'edit' && <SupplierForm refetchData={refetch} edit={{ id: selectedSupplierData?.id!, data: selectedSupplierData! }} />}
+                {modalState.type === 'view' && <SupplierView supplier={selectedSupplierData!} />}
 
                 {modalState.type === 'delete' && (
                     <DeleteContainer>
                         <h1><strong>Deletar Fornecedor</strong></h1>
-                        <p>Você tem certeza que deseja deletar o fornecedor <strong>{selectedSupplier?.name}</strong>?</p>
+                        <p>Você tem certeza que deseja deletar o fornecedor <strong>{selectedSupplierData?.name}</strong>?</p>
                         <Space justifyContent="space-between">
                             <Button type="button" onClick={handleModalClose}>Cancelar</Button>
                             <Button type="button" onClick={() => {
-                                deleteSupplierById(selectedSupplier?.id!);
+                                deleteSupplierById(selectedSupplierData?.id!);
                                 handleModalClose();
                             }}>Deletar</Button>
                         </Space>

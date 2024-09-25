@@ -2,32 +2,27 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-
-interface IUseFetch<T extends Record<string, any>> {
-    data: T[],
-    loading: boolean,
-    refetch: (search?: string) => void
+interface IUseFetch<T> {
+    data: T[];
+    loading: boolean;
+    refetch: (search?: string) => void;
 }
 
 export const useFetch = <T extends Record<string, any>>(route: string, searchTerm: string): IUseFetch<T> => {
-
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<T[]>([]);
     const [loading, setLoading] = useState(false);
 
-
     const getData = useCallback(async (search?: string) => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const { data: res } = await axios.get(route, {
-                params: { ...(search && { name_like: search }) },
-            });
+            const { data: res } = await axios.get(route, { params: search ? { name_like: search } : {} });
             setData(res);
-        } catch (error) {
+        } catch {
             toast.error('Erro ao carregar fornecedores!');
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [route]);
 
     useEffect(() => {
         getData(searchTerm);
