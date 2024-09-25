@@ -204,6 +204,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ refetchData, edit }) => {
                 <Input
                   id="address.cep"
                   {...field}
+                  maxLength={9}
                   onChange={(e) => {
                     const formatted = e.target.value
                       .replace(/\D/g, '')
